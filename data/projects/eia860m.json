@@ -8,7 +8,8 @@
         "NC",
         "SC"
       ],
-      "color": "#2563eb"
+      "color": "#2563eb",
+      "parent": "duke-energy"
     },
     {
       "id": "duke-energy-florida-llc",
@@ -17,7 +18,8 @@
       "states": [
         "FL"
       ],
-      "color": "#dc2626"
+      "color": "#dc2626",
+      "parent": "duke-energy"
     },
     {
       "id": "duke-energy-progress-nc",
@@ -26,7 +28,8 @@
       "states": [
         "NC"
       ],
-      "color": "#16a34a"
+      "color": "#16a34a",
+      "parent": "duke-energy"
     },
     {
       "id": "florida-power-light-co",
@@ -35,7 +38,8 @@
       "states": [
         "FL"
       ],
-      "color": "#9333ea"
+      "color": "#9333ea",
+      "parent": "nextera-energy"
     },
     {
       "id": "georgia-power-co",
@@ -44,7 +48,8 @@
       "states": [
         "GA"
       ],
-      "color": "#ea580c"
+      "color": "#ea580c",
+      "parent": "southern-company"
     },
     {
       "id": "north-carolina-el-member-corp",

@@ -62,3 +62,10 @@ export function distanceMiles(a: Geometry, b: Geometry): number {
   }
   return best;
 }
+
+/** Representative point for labels and arcs: the point itself, or a line's middle vertex. */
+export function anchor(g: Geometry): [number, number] {
+  if (g.type === "Point") return [g.coordinates[0], g.coordinates[1]];
+  const c = g.coordinates[Math.floor(g.coordinates.length / 2)];
+  return [c[0], c[1]];
+}

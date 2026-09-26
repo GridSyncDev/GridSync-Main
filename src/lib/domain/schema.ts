@@ -60,7 +60,7 @@ export const projectSchema = z.object({
   status: z.enum(["planned", "permitting", "approved", "under_construction"]),
   description: z.string(),
   county: z.string().optional(),
-  state: z.string().length(2),
+  state: z.string().min(2).max(2),
   sources: z.array(sourceSchema).min(1),
   // Optional overrides when the document names specific equipment/crews.
   resources: z.array(z.string()).optional(),
@@ -73,6 +73,8 @@ export const utilitySchema = z.object({
   kind: z.enum(["investor_owned", "municipal", "cooperative", "federal", "state", "independent"]),
   states: z.array(z.string().length(2)),
   color: z.string(),
+  // Holding company, so sister utilities (Duke Carolinas / Duke Progress) aren't flagged as "neighbors".
+  parent: z.string().optional(),
 });
 export type Utility = z.infer<typeof utilitySchema>;
 

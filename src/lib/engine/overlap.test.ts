@@ -80,3 +80,16 @@ test("findOverlaps sorts by score", () => {
   assert.ok(list.length >= 2);
   for (let i = 1; i < list.length; i++) assert.ok(list[i - 1].scores.total >= list[i].scores.total);
 });
+
+test("sister utilities are skipped unless asked", () => {
+  const a = base({ id: "a", utility: "duke-c" });
+  const b = base({ id: "b", utility: "duke-p", geometry: { type: "Point", coordinates: [-80.4, 25.5] } });
+  const parents = { "duke-c": "duke", "duke-p": "duke" };
+  assert.equal(compare(a, b, { ...defaultParams, parents }), null);
+  assert.ok(compare(a, b, { ...defaultParams, parents, includeAffiliates: true }));
+});
+
+test("cross-state pairs are marked", () => {
+  const o = compare(base({ id: "a", state: "GA" }), base({ id: "b", utility: "u2", state: "SC", geometry: { type: "Point", coordinates: [-80.4, 25.5] } }));
+  assert.equal(o?.crossesStateLine, true);
+});

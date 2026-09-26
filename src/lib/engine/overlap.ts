@@ -14,6 +14,9 @@ export interface OverlapParams {
   regionMiles: number;
   /** What-if: months to shift a project's construction window, by project id. */
   shifts?: Record<string, number>;
+  /** Utility id -> holding company. Sister utilities are skipped unless includeAffiliates. */
+  parents?: Record<string, string | undefined>;
+  includeAffiliates?: boolean;
 }
 
 export const defaultParams: OverlapParams = { maxMiles: 50, maxGapMonths: 6, regionMiles: 250 };
@@ -25,6 +28,8 @@ export interface Overlap {
   a: string; // project id
   b: string;
   flags: ("spatial" | "temporal")[];
+  /** The Sperry case: neighboring utilities in different states. */
+  crossesStateLine: boolean;
   kind: "sharing_opportunity" | "collision_risk";
   distanceMiles: number;
   overlapMonths: number;
@@ -45,6 +50,8 @@ const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
 
 export function compare(a: Project, b: Project, params: OverlapParams = defaultParams): Overlap | null {
   if (a.utility === b.utility) return null;
+  const pa = params.parents?.[a.utility];
+  if (!params.includeAffiliates && pa && pa === params.parents?.[b.utility]) return null;
 
   const dist = distanceMiles(a.geometry, b.geometry);
   const wa = windowOf(a, params.shifts);
@@ -87,6 +94,7 @@ export function compare(a: Project, b: Project, params: OverlapParams = defaultP
     overlap > 0 ? `construction windows overlap by ${overlap} months` : `construction windows are ${gap} months apart`,
   );
   if (shared.length) reasons.push(`both need ${shared.length} of the same resource types`);
+  if (a.state !== b.state) reasons.push(`crosses the ${a.state}–${b.state} state line: separate planning processes`);
   if (scarceShared.length) reasons.push(`both draw on constrained resources: ${scarceShared.join(", ")}`);
 
   return {
@@ -94,6 +102,7 @@ export function compare(a: Project, b: Project, params: OverlapParams = defaultP
     a: a.id,
     b: b.id,
     flags,
+    crossesStateLine: a.state !== b.state,
     kind: scarceShared.length && overlap > 0 ? "collision_risk" : "sharing_opportunity",
     distanceMiles: round(dist),
     overlapMonths: overlap,

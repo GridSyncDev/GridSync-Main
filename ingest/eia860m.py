@@ -16,6 +16,8 @@ from pathlib import Path
 
 import pandas as pd
 
+from common import PARENT
+
 URL = "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx"
 STATES = {"FL", "GA", "SC", "NC", "AL"}
 OUT = Path(__file__).resolve().parent.parent / "data" / "projects" / "eia860m.json"
@@ -107,6 +109,8 @@ def main() -> None:
                 "states": [],
                 "color": PALETTE[len(utilities) % len(PALETTE)],
             }
+            if utility_id in PARENT:
+                utilities[utility_id]["parent"] = PARENT[utility_id]
         if row["Plant State"] not in utilities[utility_id]["states"]:
             utilities[utility_id]["states"].append(row["Plant State"])
 
