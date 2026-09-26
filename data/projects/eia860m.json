@@ -1,0 +1,1738 @@
+{
+  "utilities": [
+    {
+      "id": "duke-energy-carolinas-llc",
+      "name": "Duke Energy Carolinas, LLC",
+      "kind": "investor_owned",
+      "states": [
+        "NC",
+        "SC"
+      ],
+      "color": "#2563eb"
+    },
+    {
+      "id": "duke-energy-florida-llc",
+      "name": "Duke Energy Florida, LLC",
+      "kind": "investor_owned",
+      "states": [
+        "FL"
+      ],
+      "color": "#dc2626"
+    },
+    {
+      "id": "duke-energy-progress-nc",
+      "name": "Duke Energy Progress - (NC)",
+      "kind": "investor_owned",
+      "states": [
+        "NC"
+      ],
+      "color": "#16a34a"
+    },
+    {
+      "id": "florida-power-light-co",
+      "name": "Florida Power & Light Co",
+      "kind": "investor_owned",
+      "states": [
+        "FL"
+      ],
+      "color": "#9333ea"
+    },
+    {
+      "id": "georgia-power-co",
+      "name": "Georgia Power Co",
+      "kind": "investor_owned",
+      "states": [
+        "GA"
+      ],
+      "color": "#ea580c"
+    },
+    {
+      "id": "north-carolina-el-member-corp",
+      "name": "North Carolina El Member Corp",
+      "kind": "cooperative",
+      "states": [
+        "NC"
+      ],
+      "color": "#0891b2"
+    },
+    {
+      "id": "oglethorpe-power-corporation",
+      "name": "Oglethorpe Power Corporation",
+      "kind": "cooperative",
+      "states": [
+        "GA"
+      ],
+      "color": "#ca8a04"
+    },
+    {
+      "id": "powersouth-energy-cooperative",
+      "name": "PowerSouth Energy Cooperative",
+      "kind": "cooperative",
+      "states": [
+        "AL"
+      ],
+      "color": "#db2777"
+    },
+    {
+      "id": "south-carolina-public-service-authority",
+      "name": "South Carolina Public Service Authority",
+      "kind": "state",
+      "states": [
+        "SC"
+      ],
+      "color": "#4f46e5"
+    },
+    {
+      "id": "tampa-electric-co",
+      "name": "Tampa Electric Co",
+      "kind": "investor_owned",
+      "states": [
+        "FL"
+      ],
+      "color": "#059669"
+    },
+    {
+      "id": "tennessee-valley-authority",
+      "name": "Tennessee Valley Authority",
+      "kind": "federal",
+      "states": [
+        "AL"
+      ],
+      "color": "#2563eb"
+    }
+  ],
+  "projects": [
+    {
+      "id": "eia-69144-solar-photovoltaic",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Baxter Creek Solar (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 30.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.55309,
+          35.865502
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-09",
+        "end": "2026-09",
+        "precision": "estimated"
+      },
+      "inService": "2026-09",
+      "status": "under_construction",
+      "description": "30.0 MW solar photovoltaic planned by Duke Energy Carolinas, LLC (units PV1). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Davie",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69144)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69148-batteries",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Allen 2 BESS (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 167.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.01013,
+          35.192096
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-10",
+        "end": "2027-07",
+        "precision": "estimated"
+      },
+      "inService": "2027-07",
+      "status": "planned",
+      "description": "167.0 MW batteries planned by Duke Energy Carolinas, LLC (units BESS1). Status: (P) Planned for installation, but regulatory approvals not initiated.",
+      "county": "Gaston",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69148)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69194-batteries",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Maiden Creek Battery (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 50.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.18707,
+          35.613673
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-10",
+        "end": "2027-07",
+        "precision": "estimated"
+      },
+      "inService": "2027-07",
+      "status": "under_construction",
+      "description": "50.0 MW batteries planned by Duke Energy Carolinas, LLC (units MCBA). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Catawba",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69194)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69195-batteries",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Longtown Energy Storage (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 4.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.86814,
+          34.416433
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-12",
+        "end": "2026-09",
+        "precision": "estimated"
+      },
+      "inService": "2026-09",
+      "status": "under_construction",
+      "description": "4.5 MW batteries planned by Duke Energy Carolinas, LLC (units LONTB). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Fairfield",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69195)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69196-batteries",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Nebo Energy Storage (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 2.7,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.85104,
+          35.791718
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-01",
+        "end": "2026-10",
+        "precision": "estimated"
+      },
+      "inService": "2026-10",
+      "status": "under_construction",
+      "description": "2.7 MW batteries planned by Duke Energy Carolinas, LLC (units NEBOB). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Burke",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69196)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69404-batteries",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Craggy Energy Storage (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 30.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.60868,
+          35.641793
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-12",
+        "end": "2026-09",
+        "precision": "estimated"
+      },
+      "inService": "2026-09",
+      "status": "under_construction",
+      "description": "30.5 MW batteries planned by Duke Energy Carolinas, LLC (units CRAGB). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Buncombe",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69404)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69771-batteries",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Clark Creek Solar Plant (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 14.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.24866,
+          35.532689
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2027-05",
+        "end": "2028-02",
+        "precision": "estimated"
+      },
+      "inService": "2028-02",
+      "status": "permitting",
+      "description": "14.0 MW batteries planned by Duke Energy Carolinas, LLC (units CCBS1). Status: (L) Regulatory approvals pending. Not under construction.",
+      "county": "Lincoln",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69771)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69771-solar-photovoltaic",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Clark Creek Solar Plant (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 40.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.24866,
+          35.532689
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2027-02",
+        "end": "2028-02",
+        "precision": "estimated"
+      },
+      "inService": "2028-02",
+      "status": "permitting",
+      "description": "40.0 MW solar photovoltaic planned by Duke Energy Carolinas, LLC (units CCSP1). Status: (L) Regulatory approvals pending. Not under construction.",
+      "county": "Lincoln",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69771)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69772-solar-photovoltaic",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Bush River Solar Plant (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 45.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.7944,
+          34.3861
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2027-01",
+        "end": "2028-01",
+        "precision": "estimated"
+      },
+      "inService": "2028-01",
+      "status": "permitting",
+      "description": "45.0 MW solar photovoltaic planned by Duke Energy Carolinas, LLC (units BRSP1). Status: (L) Regulatory approvals pending. Not under construction.",
+      "county": "Laurens",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69772)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-70220-solar-photovoltaic",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Robinson Solar Plant (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 76.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.1918,
+          34.4168
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-12",
+        "end": "2027-12",
+        "precision": "estimated"
+      },
+      "inService": "2027-12",
+      "status": "permitting",
+      "description": "76.0 MW solar photovoltaic planned by Duke Energy Carolinas, LLC (units RSP1). Status: (L) Regulatory approvals pending. Not under construction.",
+      "county": "Chesterfield",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 70220)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-70221-solar-photovoltaic",
+      "utility": "duke-energy-carolinas-llc",
+      "name": "Hudson Place Solar Plant (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 70.7,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.6922,
+          34.2391
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2027-01",
+        "end": "2028-01",
+        "precision": "estimated"
+      },
+      "inService": "2028-01",
+      "status": "permitting",
+      "description": "70.7 MW solar photovoltaic planned by Duke Energy Carolinas, LLC (units HPSP1). Status: (L) Regulatory approvals pending. Not under construction.",
+      "county": "Newberry",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 70221)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68052-solar-photovoltaic",
+      "utility": "duke-energy-florida-llc",
+      "name": "Bailey Mill Solar (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.9,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.93336,
+          30.409127
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-08",
+        "end": "2026-08",
+        "precision": "estimated"
+      },
+      "inService": "2026-08",
+      "status": "under_construction",
+      "description": "74.9 MW solar photovoltaic planned by Duke Energy Florida, LLC (units PV1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Jefferson",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68052)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69356-batteries",
+      "utility": "duke-energy-florida-llc",
+      "name": "Powerline Energy Storage (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 100.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.61751,
+          28.96684
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-06",
+        "end": "2027-03",
+        "precision": "estimated"
+      },
+      "inService": "2027-03",
+      "status": "planned",
+      "description": "100.0 MW batteries planned by Duke Energy Florida, LLC (units PWLNB). Status: (P) Planned for installation, but regulatory approvals not initiated.",
+      "county": "Citrus",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69356)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-70222-solar-photovoltaic",
+      "utility": "duke-energy-florida-llc",
+      "name": "Lonesome Camp Solar Plant (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.9,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.24029,
+          28.079121
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-04",
+        "end": "2027-04",
+        "precision": "estimated"
+      },
+      "inService": "2027-04",
+      "status": "under_construction",
+      "description": "74.9 MW solar photovoltaic planned by Duke Energy Florida, LLC (units LCSP1). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Osceola",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 70222)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-70223-solar-photovoltaic",
+      "utility": "duke-energy-florida-llc",
+      "name": "Turnpike Solar Plant (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.9,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.22305,
+          28.063296
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-02",
+        "end": "2027-02",
+        "precision": "estimated"
+      },
+      "inService": "2027-02",
+      "status": "under_construction",
+      "description": "74.9 MW solar photovoltaic planned by Duke Energy Florida, LLC (units TPSP1). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Osceola",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 70223)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69119-batteries",
+      "utility": "duke-energy-progress-nc",
+      "name": "New Hill 1 Battery (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 56.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.94412,
+          35.659692
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-12",
+        "end": "2027-09",
+        "precision": "estimated"
+      },
+      "inService": "2027-09",
+      "status": "under_construction",
+      "description": "56.0 MW batteries planned by Duke Energy Progress - (NC) (units NHBA1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Wake",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69119)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69357-solar-photovoltaic",
+      "utility": "duke-energy-progress-nc",
+      "name": "Asheville Solar (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 9.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.54223,
+          35.470591
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-12",
+        "end": "2026-12",
+        "precision": "estimated"
+      },
+      "inService": "2026-12",
+      "status": "under_construction",
+      "description": "9.5 MW solar photovoltaic planned by Duke Energy Progress - (NC) (units PV1). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Buncombe",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69357)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69429-batteries",
+      "utility": "duke-energy-progress-nc",
+      "name": "Asheville BESS (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 17.3,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.54163,
+          35.472139
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-12",
+        "end": "2026-09",
+        "precision": "estimated"
+      },
+      "inService": "2026-09",
+      "status": "under_construction",
+      "description": "17.3 MW batteries planned by Duke Energy Progress - (NC) (units AVLB1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Buncombe",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69429)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69444-batteries",
+      "utility": "duke-energy-progress-nc",
+      "name": "Elm City BESS (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 20.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -77.85501,
+          35.789717
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-12",
+        "end": "2026-09",
+        "precision": "estimated"
+      },
+      "inService": "2026-09",
+      "status": "under_construction",
+      "description": "20.0 MW batteries planned by Duke Energy Progress - (NC) (units ECB1). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Wilson",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69444)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69988-batteries",
+      "utility": "duke-energy-progress-nc",
+      "name": "Warsaw 2 Energy Storage (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 11.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -78.1165,
+          35.003702
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-11",
+        "end": "2026-08",
+        "precision": "estimated"
+      },
+      "inService": "2026-08",
+      "status": "under_construction",
+      "description": "11.0 MW batteries planned by Duke Energy Progress - (NC) (units WBA2). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Duplin",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69988)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68824-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Middle Lake (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.34074,
+          30.380511
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-04",
+        "end": "2027-04",
+        "precision": "estimated"
+      },
+      "inService": "2027-04",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Madison",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68824)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68825-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Pinecone (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -85.25499,
+          30.439415
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-10",
+        "end": "2027-10",
+        "precision": "estimated"
+      },
+      "inService": "2027-10",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Calhoun",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68825)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68826-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Saddle (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -85.25499,
+          30.439415
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-10",
+        "end": "2027-10",
+        "precision": "estimated"
+      },
+      "inService": "2027-10",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Calhoun",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68826)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68827-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Spanish Moss (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.56447,
+          27.509782
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-10",
+        "end": "2027-10",
+        "precision": "estimated"
+      },
+      "inService": "2027-10",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "St Lucie",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68827)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68828-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Tangelo (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.73651,
+          27.507993
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-01",
+        "end": "2027-01",
+        "precision": "estimated"
+      },
+      "inService": "2027-01",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Okeechobee",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68828)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68829-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Ambersweet (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.62782,
+          27.567468
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-04",
+        "end": "2027-04",
+        "precision": "estimated"
+      },
+      "inService": "2027-04",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Indian River",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68829)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68830-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Catfish (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.78854,
+          27.277731
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-07",
+        "end": "2027-07",
+        "precision": "estimated"
+      },
+      "inService": "2027-07",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Okeechobee",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68830)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68831-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Cocoplum (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.1907,
+          26.762027
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-07",
+        "end": "2027-07",
+        "precision": "estimated"
+      },
+      "inService": "2027-07",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Hendry",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68831)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68832-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "County Line (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.80083,
+          27.110556
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-04",
+        "end": "2027-04",
+        "precision": "estimated"
+      },
+      "inService": "2027-04",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "DeSoto",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68832)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68833-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Hardwood Hammock (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.77522,
+          27.282662
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-07",
+        "end": "2027-07",
+        "precision": "estimated"
+      },
+      "inService": "2027-07",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Walton",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68833)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68834-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Hendry (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.03189,
+          26.410345
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-01",
+        "end": "2027-01",
+        "precision": "estimated"
+      },
+      "inService": "2027-01",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Hendry",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68834)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68835-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Joshua Creek (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.77522,
+          27.282662
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-10",
+        "end": "2027-10",
+        "precision": "estimated"
+      },
+      "inService": "2027-10",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "DeSoto",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68835)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68836-solar-photovoltaic",
+      "utility": "florida-power-light-co",
+      "name": "Maple Trail (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.18501,
+          30.314392
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-07",
+        "end": "2027-07",
+        "precision": "estimated"
+      },
+      "inService": "2027-07",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Florida Power & Light Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Baker",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68836)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-708-batteries",
+      "utility": "georgia-power-co",
+      "name": "Hammond (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 57.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -85.3456,
+          34.2528
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-12",
+        "end": "2026-09",
+        "precision": "estimated"
+      },
+      "inService": "2026-09",
+      "status": "under_construction",
+      "description": "57.5 MW batteries planned by Georgia Power Co (units 5). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Floyd",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 708)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-728-natural-gas-fired-combustion-turbine",
+      "utility": "georgia-power-co",
+      "name": "Yates (Natural Gas Fired Combustion Turbine)",
+      "type": "generation_gas",
+      "voltageKv": null,
+      "capacityMw": 1448.4,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.8986,
+          33.4622
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2024-12",
+        "end": "2027-12",
+        "precision": "estimated"
+      },
+      "inService": "2027-12",
+      "status": "under_construction",
+      "description": "1448.4 MW natural gas fired combustion turbine planned by Georgia Power Co (units 8, 10, 9). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Coweta",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 728)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68512-batteries",
+      "utility": "georgia-power-co",
+      "name": "McGrau Ford Battery Storage Facility (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 530.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.3289,
+          34.324977
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-11",
+        "end": "2026-08",
+        "precision": "estimated"
+      },
+      "inService": "2026-08",
+      "status": "under_construction",
+      "description": "530.0 MW batteries planned by Georgia Power Co (units 1, 2). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Cherokee",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68512)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69870-batteries",
+      "utility": "north-carolina-el-member-corp",
+      "name": "Parkwood BESS (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 11.6,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.63255,
+          34.891701
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-03",
+        "end": "2026-12",
+        "precision": "estimated"
+      },
+      "inService": "2026-12",
+      "status": "under_construction",
+      "description": "11.6 MW batteries planned by North Carolina El Member Corp (units BAT1). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Union",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69870)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69871-batteries",
+      "utility": "north-carolina-el-member-corp",
+      "name": "Tanglewood BESS (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 3.9,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.30127,
+          36.272111
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-03",
+        "end": "2026-12",
+        "precision": "estimated"
+      },
+      "inService": "2026-12",
+      "status": "under_construction",
+      "description": "3.9 MW batteries planned by North Carolina El Member Corp (units BAT1). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Pasquotank",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69871)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69872-batteries",
+      "utility": "north-carolina-el-member-corp",
+      "name": "Windsor BESS (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 3.9,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -76.98179,
+          36.025838
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-03",
+        "end": "2026-12",
+        "precision": "estimated"
+      },
+      "inService": "2026-12",
+      "status": "under_construction",
+      "description": "3.9 MW batteries planned by North Carolina El Member Corp (units BAT1). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Bertie",
+      "state": "NC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69872)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-7916-natural-gas-fired-combustion-turbine",
+      "utility": "oglethorpe-power-corporation",
+      "name": "Talbot County Energy (Natural Gas Fired Combustion Turbine)",
+      "type": "generation_gas",
+      "voltageKv": null,
+      "capacityMw": 262.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -84.6917,
+          32.5892
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2027-01",
+        "end": "2029-01",
+        "precision": "estimated"
+      },
+      "inService": "2029-01",
+      "status": "planned",
+      "description": "262.0 MW natural gas fired combustion turbine planned by Oglethorpe Power Corporation (units 7). Status: (P) Planned for installation, but regulatory approvals not initiated.",
+      "county": "Talbot",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 7916)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-68546-natural-gas-fired-combined-cycle",
+      "utility": "oglethorpe-power-corporation",
+      "name": "Smarr Combined Cycle Energy Facility (Natural Gas Fired Combined Cycle)",
+      "type": "generation_gas",
+      "voltageKv": null,
+      "capacityMw": 804.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -83.84369,
+          32.975936
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-12",
+        "end": "2029-06",
+        "precision": "estimated"
+      },
+      "inService": "2029-06",
+      "status": "planned",
+      "description": "804.0 MW natural gas fired combined cycle planned by Oglethorpe Power Corporation (units 1, 2). Status: (P) Planned for installation, but regulatory approvals not initiated.",
+      "county": "Monroe",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 68546)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-56-natural-gas-fired-combustion-turbine",
+      "utility": "powersouth-energy-cooperative",
+      "name": "Lowman Energy Center (Natural Gas Fired Combustion Turbine)",
+      "type": "generation_gas",
+      "voltageKv": null,
+      "capacityMw": 438.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -87.91075,
+          31.488019
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2027-11",
+        "end": "2029-11",
+        "precision": "estimated"
+      },
+      "inService": "2029-11",
+      "status": "permitting",
+      "description": "438.0 MW natural gas fired combustion turbine planned by PowerSouth Energy Cooperative (units LEC3). Status: (L) Regulatory approvals pending. Not under construction.",
+      "county": "Washington",
+      "state": "AL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 56)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-6249-petroleum-liquids",
+      "utility": "south-carolina-public-service-authority",
+      "name": "Winyah (Petroleum Liquids)",
+      "type": "generation_other",
+      "voltageKv": null,
+      "capacityMw": 114.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -79.35724,
+          33.33184
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-06",
+        "end": "2027-12",
+        "precision": "estimated"
+      },
+      "inService": "2027-12",
+      "status": "planned",
+      "description": "114.0 MW petroleum liquids planned by South Carolina Public Service Authority (units 5, 6). Status: (P) Planned for installation, but regulatory approvals not initiated.",
+      "county": "Georgetown",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 6249)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69461-solar-photovoltaic",
+      "utility": "tampa-electric-co",
+      "name": "Keene Branch Solar (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 74.5,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.2657,
+          27.658706
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-12",
+        "end": "2026-12",
+        "precision": "estimated"
+      },
+      "inService": "2026-12",
+      "status": "under_construction",
+      "description": "74.5 MW solar photovoltaic planned by Tampa Electric Co (units 1). Status: (V) Under construction, more than 50 percent complete.",
+      "county": "Hillsborough",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69461)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69522-solar-photovoltaic",
+      "utility": "tampa-electric-co",
+      "name": "Brewster Solar (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 42.7,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.96187,
+          27.74188
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-12",
+        "end": "2026-12",
+        "precision": "estimated"
+      },
+      "inService": "2026-12",
+      "status": "under_construction",
+      "description": "42.7 MW solar photovoltaic planned by Tampa Electric Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Polk",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69522)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-69523-solar-photovoltaic",
+      "utility": "tampa-electric-co",
+      "name": "Mattaniah Solar (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 52.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -82.04614,
+          27.893214
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2025-12",
+        "end": "2026-12",
+        "precision": "estimated"
+      },
+      "inService": "2026-12",
+      "status": "under_construction",
+      "description": "52.0 MW solar photovoltaic planned by Tampa Electric Co (units 1). Status: (U) Under construction, less than or equal to 50 percent complete.",
+      "county": "Polk",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 69523)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-70395-batteries",
+      "utility": "tampa-electric-co",
+      "name": "Pace Road Battery Storage (Batteries)",
+      "type": "generation_storage",
+      "voltageKv": null,
+      "capacityMw": 20.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.82978,
+          28.136235
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2027-01",
+        "end": "2027-10",
+        "precision": "estimated"
+      },
+      "inService": "2027-10",
+      "status": "approved",
+      "description": "20.0 MW batteries planned by Tampa Electric Co (units BESS1). Status: (T) Regulatory approvals received. Not under construction.",
+      "county": "Polk",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 70395)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "eia-67233-solar-photovoltaic",
+      "utility": "tennessee-valley-authority",
+      "name": "Lawrence County Solar (Solar Photovoltaic)",
+      "type": "generation_solar",
+      "voltageKv": null,
+      "capacityMw": 193.0,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -87.25098,
+          34.63928
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2026-12",
+        "end": "2027-12",
+        "precision": "estimated"
+      },
+      "inService": "2027-12",
+      "status": "planned",
+      "description": "193.0 MW solar photovoltaic planned by Tennessee Valley Authority (units SOL1). Status: (P) Planned for installation, but regulatory approvals not initiated.",
+      "county": "Lawrence",
+      "state": "AL",
+      "sources": [
+        {
+          "url": "https://www.eia.gov/electricity/data/eia860m/archive/xls/july_generator2026.xlsx",
+          "title": "EIA-860M Preliminary Monthly Electric Generator Inventory, July 2026 (plant 67233)",
+          "publisher": "U.S. Energy Information Administration",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    }
+  ]
+}
