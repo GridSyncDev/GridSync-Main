@@ -1,4 +1,4 @@
-# GridSync
+# GridSync 
 
 **Compare utilities' public construction plans and identify coordination opportunities** using closest-point geography, schedule relationships, and a deterministic four-point rubric. Built at ShellHacks 2026 for the Sperry Tech challenge.
 
