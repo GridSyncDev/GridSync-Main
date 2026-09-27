@@ -1,0 +1,557 @@
+{
+  "utilities": [
+    {
+      "id": "homestead-public-services",
+      "name": "Homestead Public Services (HPS Energy)",
+      "kind": "municipal",
+      "states": [
+        "FL"
+      ],
+      "color": "#22d3ee"
+    },
+    {
+      "id": "florida-power-light-co",
+      "name": "Florida Power & Light Co",
+      "kind": "investor_owned",
+      "states": [
+        "FL"
+      ],
+      "color": "#2563eb",
+      "parent": "nextera-energy"
+    },
+    {
+      "id": "dominion-energy-south-carolina",
+      "name": "Dominion Energy South Carolina",
+      "kind": "investor_owned",
+      "states": [
+        "SC"
+      ],
+      "color": "#f43f5e",
+      "parent": "dominion-energy"
+    },
+    {
+      "id": "georgia-power-co",
+      "name": "Georgia Power Co",
+      "kind": "investor_owned",
+      "states": [
+        "GA"
+      ],
+      "color": "#f59e0b",
+      "parent": "southern-company"
+    }
+  ],
+  "projects": [
+    {
+      "id": "hps-renaissance-second-interconnection",
+      "utility": "homestead-public-services",
+      "name": "Renaissance Substation 138 kV second FPL interconnection",
+      "type": "substation_upgrade",
+      "voltageKv": 138,
+      "capacityMw": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.4287,
+          25.4576
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2027-07",
+        "end": "2028-06",
+        "precision": "estimated"
+      },
+      "inService": "2028-06",
+      "status": "planned",
+      "description": "HPS plans a second 138 kV transmission path from FPL at the Renaissance Substation, looping FPL's Florida City-Princeton 138 kV line, so Homestead no longer depends on a single interconnection at Lucy. Engineering (E.C. Fennell, $330,008) awarded Aug 2026; construction window estimated after design.",
+      "county": "Miami-Dade",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.southdadenewsleader.com/news/homestead-reviews-infrastructure-utility-and-budget-items/article_dfb49f20-4897-423b-8a2a-42f8634d1d74.html",
+          "title": "Homestead Reviews Infrastructure, Utility and Budget Items (Aug 21, 2026)",
+          "publisher": "South Dade News Leader",
+          "retrieved": "2026-09-26",
+          "quote": "Homestead's electric system currently relies heavily on a single 138-kilovolt interconnection at the Lucy Switching Station to receive power from FPL"
+        },
+        {
+          "url": "https://www.openstreetmap.org/",
+          "title": "Substation locations (OpenStreetMap)",
+          "publisher": "OpenStreetMap contributors (ODbL)"
+        }
+      ],
+      "resources": [
+        "substation_electricians",
+        "hv_breakers",
+        "civil_crews",
+        "line_crews",
+        "cranes"
+      ]
+    },
+    {
+      "id": "hps-donnie-substation",
+      "utility": "homestead-public-services",
+      "name": "Donnie 138/13.2 kV distribution substation (89 MVA)",
+      "type": "substation_new",
+      "voltageKv": 138,
+      "capacityMw": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.4776,
+          25.4687
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2024-06",
+        "end": "2026-12",
+        "precision": "estimated"
+      },
+      "inService": "2026-12",
+      "status": "under_construction",
+      "description": "Design-build of the new Donnie distribution substation, 138 kV/13.2 kV, 89 MVA net, for growth in Homestead (bid 202310; shortlist Energy Erectors, Burns & McDonnell, Powerserve). The bid does not publish the site, so it is placed at the City of Homestead.",
+      "county": "Miami-Dade",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.homesteadfl.gov/bids.aspx?bidID=300",
+          "title": "Bid 202310 Design-Build Services for Donnie Avocado Substation",
+          "publisher": "City of Homestead",
+          "retrieved": "2026-09-26",
+          "quote": "138 kV/13.2 kV, capable of 89 M.V.A. net output"
+        }
+      ]
+    },
+    {
+      "id": "fpl-oasis-substation",
+      "utility": "florida-power-light-co",
+      "name": "Oasis 500/230 kV substation (new)",
+      "type": "substation_new",
+      "voltageKv": 500,
+      "capacityMw": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -80.49286,
+          25.65784
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2029-01",
+        "end": "2031-12",
+        "precision": "published"
+      },
+      "inService": "2031-12",
+      "status": "approved",
+      "description": "New Oasis substation in southwest Miami-Dade, terminus of the Andytown-Oasis project. FPL expects ~220,000 new customers (~11% load growth) in Miami-Dade 2026-2033. Site placed from FPL's corridor map.",
+      "county": "Miami-Dade",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.floridapsc.com/pscfiles/website-files/PDF/Utilities/Electricgas/TenYearSitePlans/2026/Florida%20Power%20and%20Light%20Company.pdf",
+          "title": "FPL Ten Year Power Plant Site Plan 2026-2035, Table III.E.1 List of Proposed Power Lines",
+          "publisher": "Florida Power & Light / Florida PSC",
+          "retrieved": "2026-09-26"
+        },
+        {
+          "url": "https://www.fpl.com/reliability/andytown-oasis-project.html",
+          "title": "FPL | Andytown-Oasis Project",
+          "publisher": "Florida Power & Light",
+          "retrieved": "2026-09-26",
+          "quote": "2026-2028: Design and Permitting. Early 2029: Start Construction. Late 2033: Project Completion"
+        },
+        {
+          "url": "https://www.fpl.com/content/dam/fplgp/us/en/reliability/pdf/andytown-oasis-preliminary-preferred-corridor.pdf",
+          "title": "Andytown-Oasis Preliminary Preferred Corridor map (route georeferenced by GridSync)",
+          "publisher": "Florida Power & Light / SWCA",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "fpl-andytown-oasis-500kv",
+      "utility": "florida-power-light-co",
+      "name": "Andytown-Oasis 500 kV transmission line",
+      "type": "transmission_line_new",
+      "voltageKv": 500,
+      "capacityMw": null,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -80.4397,
+            26.0352
+          ],
+          [
+            -80.44462,
+            26.031
+          ],
+          [
+            -80.44462,
+            25.94206
+          ],
+          [
+            -80.45547,
+            25.92573
+          ],
+          [
+            -80.45065,
+            25.90939
+          ],
+          [
+            -80.44663,
+            25.8132
+          ],
+          [
+            -80.44663,
+            25.77327
+          ],
+          [
+            -80.45266,
+            25.77327
+          ],
+          [
+            -80.45266,
+            25.74786
+          ],
+          [
+            -80.49768,
+            25.74786
+          ],
+          [
+            -80.49768,
+            25.68796
+          ],
+          [
+            -80.49487,
+            25.65784
+          ]
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2029-01",
+        "end": "2031-12",
+        "precision": "published"
+      },
+      "inService": "2031-12",
+      "status": "approved",
+      "description": "New 500 kV line (30 circuit miles, 3,464 MVA) from Andytown (Broward) to the planned Oasis substation (Miami-Dade). Need determination approved by the FPSC in 2026; certification hearing cancelled Sept 2026.",
+      "county": "Broward / Miami-Dade",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.floridapsc.com/pscfiles/website-files/PDF/Utilities/Electricgas/TenYearSitePlans/2026/Florida%20Power%20and%20Light%20Company.pdf",
+          "title": "FPL Ten Year Power Plant Site Plan 2026-2035, Table III.E.1 List of Proposed Power Lines",
+          "publisher": "Florida Power & Light / Florida PSC",
+          "retrieved": "2026-09-26",
+          "quote": "FPL Oasis Andytown 30 December/2031 500 3,464"
+        },
+        {
+          "url": "https://floridadep.gov/water/siting-coordination-office/content/fpl-andytown-oasis-500kv-transmission-line-project",
+          "title": "FDEP Siting: FPL Andytown-Oasis 500kV Transmission Line Project (TA26-21)",
+          "publisher": "Florida Department of Environmental Protection",
+          "retrieved": "2026-09-26",
+          "quote": "approximately 31.2 miles long beginning at the Andytown Substation in Broward County and ending at the Oasis Substation in Miami-Dade County"
+        },
+        {
+          "url": "https://www.fpl.com/content/dam/fplgp/us/en/reliability/pdf/andytown-oasis-preliminary-preferred-corridor.pdf",
+          "title": "Andytown-Oasis Preliminary Preferred Corridor map (route georeferenced by GridSync)",
+          "publisher": "Florida Power & Light / SWCA",
+          "retrieved": "2026-09-26"
+        }
+      ]
+    },
+    {
+      "id": "fpl-quarry-oasis-lines",
+      "utility": "florida-power-light-co",
+      "name": "Quarry-Oasis 500 kV + 230 kV lines",
+      "type": "transmission_line_new",
+      "voltageKv": 500,
+      "capacityMw": null,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -80.4406,
+            25.8132
+          ],
+          [
+            -80.44663,
+            25.8132
+          ],
+          [
+            -80.44663,
+            25.77327
+          ],
+          [
+            -80.45266,
+            25.77327
+          ],
+          [
+            -80.45266,
+            25.74786
+          ],
+          [
+            -80.49768,
+            25.74786
+          ],
+          [
+            -80.49768,
+            25.68796
+          ],
+          [
+            -80.49487,
+            25.65784
+          ]
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2029-01",
+        "end": "2033-12",
+        "precision": "published"
+      },
+      "inService": "2033-12",
+      "status": "approved",
+      "description": "One 500 kV (3,464 MVA) and one 230 kV (1,195 MVA) line between the existing Quarry substation and Oasis, ~15 circuit miles each.",
+      "county": "Miami-Dade",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.floridapsc.com/pscfiles/website-files/PDF/Utilities/Electricgas/TenYearSitePlans/2026/Florida%20Power%20and%20Light%20Company.pdf",
+          "title": "FPL Ten Year Power Plant Site Plan 2026-2035, Table III.E.1 List of Proposed Power Lines",
+          "publisher": "Florida Power & Light / Florida PSC",
+          "retrieved": "2026-09-26",
+          "quote": "FPL Oasis Quarry 15 December/2033 500 3,464 / FPL Quarry Oasis 15 December/2033 230 1,195"
+        },
+        {
+          "url": "https://www.fpl.com/reliability/andytown-oasis-project.html",
+          "title": "FPL | Andytown-Oasis Project",
+          "publisher": "Florida Power & Light",
+          "retrieved": "2026-09-26",
+          "quote": "2026-2028: Design and Permitting. Early 2029: Start Construction. Late 2033: Project Completion"
+        },
+        {
+          "url": "https://www.openstreetmap.org/",
+          "title": "Substation locations (OpenStreetMap)",
+          "publisher": "OpenStreetMap contributors (ODbL)"
+        }
+      ]
+    },
+    {
+      "id": "fpl-levee-oasis-230kv",
+      "utility": "florida-power-light-co",
+      "name": "Levee-Oasis 230 kV line",
+      "type": "transmission_line_new",
+      "voltageKv": 230,
+      "capacityMw": null,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -80.4356,
+            25.8133
+          ],
+          [
+            -80.44663,
+            25.8132
+          ],
+          [
+            -80.44663,
+            25.77327
+          ],
+          [
+            -80.45266,
+            25.77327
+          ],
+          [
+            -80.45266,
+            25.74786
+          ],
+          [
+            -80.49768,
+            25.74786
+          ],
+          [
+            -80.49768,
+            25.68796
+          ],
+          [
+            -80.49487,
+            25.65784
+          ]
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2029-01",
+        "end": "2033-12",
+        "precision": "published"
+      },
+      "inService": "2033-12",
+      "status": "approved",
+      "description": "230 kV line (1,195 MVA, ~15 circuit miles) from the existing Levee substation to Oasis.",
+      "county": "Miami-Dade",
+      "state": "FL",
+      "sources": [
+        {
+          "url": "https://www.floridapsc.com/pscfiles/website-files/PDF/Utilities/Electricgas/TenYearSitePlans/2026/Florida%20Power%20and%20Light%20Company.pdf",
+          "title": "FPL Ten Year Power Plant Site Plan 2026-2035, Table III.E.1 List of Proposed Power Lines",
+          "publisher": "Florida Power & Light / Florida PSC",
+          "retrieved": "2026-09-26",
+          "quote": "FPL Levee Oasis 15 December/2033 230 1,195"
+        },
+        {
+          "url": "https://www.fpl.com/reliability/andytown-oasis-project.html",
+          "title": "FPL | Andytown-Oasis Project",
+          "publisher": "Florida Power & Light",
+          "retrieved": "2026-09-26",
+          "quote": "2026-2028: Design and Permitting. Early 2029: Start Construction. Late 2033: Project Completion"
+        },
+        {
+          "url": "https://www.openstreetmap.org/",
+          "title": "Substation locations (OpenStreetMap)",
+          "publisher": "OpenStreetMap contributors (ODbL)"
+        }
+      ]
+    },
+    {
+      "id": "gp-mcintosh-cc-expansion",
+      "utility": "georgia-power-co",
+      "name": "Plant McIntosh combined-cycle expansion (South McIntosh 500 kV bus)",
+      "type": "generation_gas",
+      "voltageKv": 500,
+      "capacityMw": 785,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.1751,
+          32.3521
+        ]
+      },
+      "locationPrecision": "exact",
+      "construction": {
+        "start": "2027-07",
+        "end": "2030-07",
+        "precision": "estimated"
+      },
+      "inService": "2030-07",
+      "status": "approved",
+      "description": "New combined-cycle unit at Plant McIntosh (PSC-approved Dec 2025), 785 MW interconnecting at the South McIntosh 500 kV bus, proposed completion July 1, 2030. Serves large new loads incl. a 3.2 GW data center (Project Camellia).",
+      "county": "Effingham",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://www.interconnection.fyi/project/southern-company-26-ic-1413",
+          "title": "South McIntosh Substation 500 kV Bus (26-IC-1413), Southern Company interconnection queue",
+          "publisher": "interconnection.fyi (Southern Company OASIS queue)",
+          "retrieved": "2026-09-26",
+          "quote": "785 MW ... Proposed Completion Date: July 1, 2030"
+        },
+        {
+          "url": "https://www.effinghamherald.net/data-centers/friday-public-hearing-to-address-data-center-power-plant-expansion-plant-mcintosh-georgia-power-openai-project-camellia/",
+          "title": "Public hearing on Plant McIntosh expansion",
+          "publisher": "Effingham Herald",
+          "retrieved": "2026-09-26"
+        },
+        {
+          "url": "https://www.openstreetmap.org/",
+          "title": "Substation locations (OpenStreetMap)",
+          "publisher": "OpenStreetMap contributors (ODbL)"
+        }
+      ]
+    },
+    {
+      "id": "gp-effingham-500kv-substation",
+      "utility": "georgia-power-co",
+      "name": "Effingham County 500 kV substation (new)",
+      "type": "substation_new",
+      "voltageKv": 500,
+      "capacityMw": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.3378,
+          32.3685
+        ]
+      },
+      "locationPrecision": "county",
+      "construction": {
+        "start": "2027-06",
+        "end": "2029-12",
+        "precision": "estimated"
+      },
+      "inService": "2029-12",
+      "status": "planned",
+      "description": "New 500 kV substation to serve a large-load customer and strengthen the grid in fast-growing Effingham County; land acquisition begins fall 2026. Site not yet public, placed at the county centroid.",
+      "county": "Effingham",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://www.statesboroherald.com/local/southeast-georgia-power-grid-projects-helping-fuel-data-center-development/",
+          "title": "Southeast Georgia power grid projects helping fuel data center development",
+          "publisher": "Statesboro Herald",
+          "retrieved": "2026-09-26",
+          "quote": "substation survey notifications will be delivered to property owners this summer, with land acquisition activities beginning this fall"
+        }
+      ]
+    },
+    {
+      "id": "desc-jasper-okatie-sherwood-230kv",
+      "utility": "dominion-energy-south-carolina",
+      "name": "Jasper-Okatie-Sherwood 230 kV lines + Sherwood substation",
+      "type": "transmission_line_new",
+      "voltageKv": 230,
+      "capacityMw": null,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [
+            -81.1242,
+            32.3607
+          ],
+          [
+            -81.0797,
+            32.2885
+          ],
+          [
+            -81.045,
+            32.299
+          ],
+          [
+            -80.927,
+            32.298
+          ]
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2025-01",
+        "end": "2027-06",
+        "precision": "estimated"
+      },
+      "inService": "2027-06",
+      "status": "under_construction",
+      "description": "Two new 230 kV lines: Jasper Generating Plant to Okatie, and Okatie to the new Sherwood substation, crossing Hwy 17, Main St in Hardeeville and Hwy 141. Tree clearing and construction began Q1 2025. Route sketched through the published road crossings.",
+      "county": "Jasper",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://www.dominionenergy.com/about/delivering-energy/electric-projects/power-line-projects/jasper-okatie-sherwood",
+          "title": "Jasper-Okatie-Sherwood",
+          "publisher": "Dominion Energy",
+          "retrieved": "2026-09-26",
+          "quote": "Q1 2025: Tree clearing and construction of transmission lines and substation begin"
+        },
+        {
+          "url": "https://www.openstreetmap.org/",
+          "title": "Substation locations (OpenStreetMap)",
+          "publisher": "OpenStreetMap contributors (ODbL)"
+        }
+      ]
+    }
+  ]
+}

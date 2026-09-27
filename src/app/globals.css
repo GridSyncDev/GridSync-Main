@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #070b14;
+  --panel: rgba(13, 19, 33, 0.92);
+  --line: rgba(148, 163, 184, 0.16);
+  --muted: #8b98ad;
+  --text: #e6edf7;
+  --share: #2dd4bf;
+  --collide: #fb923c;
+  --interstate: #a78bfa;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-panel: var(--panel);
+  --color-line: var(--line);
+  --color-muted: var(--muted);
+  --color-text: var(--text);
+  --color-share: var(--share);
+  --color-collide: var(--collide);
+  --color-interstate: var(--interstate);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+/* Thin scrollbars inside panels */
+.scroll-thin {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(148, 163, 184, 0.25) transparent;
+}
+
+input[type="range"] {
+  accent-color: var(--share);
+}
+
+.maplibregl-ctrl-attrib {
+  font-size: 10px;
+}

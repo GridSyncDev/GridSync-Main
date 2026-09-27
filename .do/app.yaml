@@ -1,0 +1,27 @@
+# DigitalOcean App Platform spec. Secrets are set in the App Platform settings (or filled in
+# at deploy time); never commit their values.
+name: gridsync
+region: nyc
+services:
+  - name: web
+    git:
+      repo_clone_url: https://github.com/PinedaMiguel/GridSync-Main.git
+      branch: feat/scaffold-contract
+    environment_slug: node-js
+    build_command: npm run build
+    run_command: npm start
+    http_port: 8080
+    instance_count: 1
+    instance_size_slug: apps-s-1vcpu-1gb
+    health_check:
+      http_path: /api/projects
+    envs:
+      - key: DATABASE_URL
+        scope: RUN_TIME
+        type: SECRET
+      - key: GOOGLE_GENERATIVE_AI_API_KEY
+        scope: RUN_TIME
+        type: SECRET
+      - key: ELEVENLABS_API_KEY
+        scope: RUN_TIME
+        type: SECRET
