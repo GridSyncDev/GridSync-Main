@@ -5,6 +5,7 @@ import { writeFile } from "node:fs/promises";
 import pg from "pg";
 import { loadJsonDataset } from "../src/lib/data";
 import { resourcesFor } from "../src/lib/domain/resources";
+import { connectionConfig } from "../src/lib/db";
 import { addMonths } from "../src/lib/engine/time";
 
 const q = (v: unknown) => (v === null || v === undefined ? "NULL" : `'${String(v).replace(/'/g, "''")}'`);
@@ -58,7 +59,7 @@ async function main() {
     return;
   }
   if (!process.env.DATABASE_URL) throw new Error("DATABASE_URL is not set");
-  const client = new pg.Client({ connectionString: process.env.DATABASE_URL });
+  const client = new pg.Client(connectionConfig());
   await client.connect();
   await client.query(sql);
   const { rows } = await client.query("SELECT count(*)::int AS n FROM projects");

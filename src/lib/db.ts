@@ -3,9 +3,17 @@ import { datasetSchema, type Dataset } from "./domain/schema";
 
 // Postgres + PostGIS (Tiger Data). Only used when DATABASE_URL is set; see src/lib/data.ts.
 
+// pg treats sslmode=require in the URL as verify-full, which rejects Tiger Cloud's certificate
+// chain; drop it and keep the connection encrypted via the ssl option instead.
+export function connectionConfig(url = process.env.DATABASE_URL ?? ""): pg.PoolConfig {
+  const u = new URL(url);
+  u.searchParams.delete("sslmode");
+  return { connectionString: u.toString(), ssl: { rejectUnauthorized: false } };
+}
+
 let pool: pg.Pool | null = null;
 function db(): pg.Pool {
-  pool ??= new pg.Pool({ connectionString: process.env.DATABASE_URL, max: 3, ssl: { rejectUnauthorized: false } });
+  pool ??= new pg.Pool({ ...connectionConfig(), max: 3 });
   return pool;
 }
 
