@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import type { Dataset, Project } from "@/lib/domain/schema";
 import { coordinationThresholdsKm, coordinationThresholdsMiles } from "@/lib/engine/config";
@@ -156,6 +157,12 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
               >
                 {source === "postgres" ? "● Tiger Data · PostGIS" : "local data"}
               </span>
+              <Link
+                href="/ingest"
+                className="whitespace-nowrap rounded border border-line px-1.5 py-0.5 text-sky-300 hover:bg-white/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-300"
+              >
+                + Add public plan
+              </Link>
             </div>
           </div>
         </div>
