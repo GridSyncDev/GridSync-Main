@@ -497,6 +497,13 @@
           "retrieved": "2026-09-27",
           "quote": "In-Service Year: 2026. Project Name: MCINTOSH - PURRYSBURG 230KV REACTORS. Description: Install reactors on the McIntosh - Purrysburg (Black and White) 230kV tie lines at McIntosh. Rebuild 0.1 miles (GPC portion) for both lines to (2) 200C 1351 ACSS conductor.",
           "page": 77
+        },
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "GridSync transcription of Sperry Tech starter data",
+          "retrieved": "2026-09-27",
+          "quote": "GPC_2: McIntosh endpoint 32.352116, -81.175112; Purrysburg unresolved; in-service target 2026-06-01."
         }
       ]
     },
@@ -573,9 +580,244 @@
           "publisher": "Dominion Energy",
           "retrieved": "2026-09-26",
           "quote": "Q1 2025: Tree clearing and construction of transmission lines and substation begin"
+        },
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "GridSync transcription of Sperry Tech starter data",
+          "retrieved": "2026-09-27",
+          "quote": "DESC_3: Jasper 32.359120, -81.124600; Okatie 32.333758, -81.032495; in-service target 2025-12-31."
+        }
+      ]
+    },
+    {
+      "id": "desc-stevens-creek-hooks-rebuilds",
+      "utility": "dominion-energy-south-carolina",
+      "name": "Stevens Creek-Hooks 115 kV / LR Plumb Branch 46 kV rebuilds",
+      "type": "transmission_line_upgrade",
+      "voltageKv": 115,
+      "capacityMw": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-82.051362, 33.562599]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2024-03",
+        "end": "2024-12",
+        "precision": "estimated"
+      },
+      "inService": "2024-12",
+      "status": "planned",
+      "description": "Rebuild work named by the sponsor starter workbook as Stevens Creek-Hooks 115 kV / LR Plumb Branch 46 kV. Only the Stevens Creek endpoint is located in the sponsor reference; Hooks remains unresolved, so this record does not claim a complete route. The workbook publishes the December 2024 in-service target, while the March-December construction window is inferred using the repository's minimum transmission-upgrade convention and is not a utility-published build schedule.",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "GridSync transcription of Sperry Tech starter data",
+          "retrieved": "2026-09-27",
+          "quote": "DESC_1: Stevens Creek 33.562599, -82.051362; Hooks unresolved; in-service target 2024-12-31."
+        }
+      ]
+    },
+    {
+      "id": "desc-hooks-thurmond-115kv-rebuild",
+      "utility": "dominion-energy-south-carolina",
+      "name": "Hooks-Thurmond 115 kV tie rebuild",
+      "type": "transmission_line_upgrade",
+      "voltageKv": 115,
+      "capacityMw": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-82.195931, 33.660127]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2024-03",
+        "end": "2024-12",
+        "precision": "estimated"
+      },
+      "inService": "2024-12",
+      "status": "planned",
+      "description": "Rebuild the Hooks-Thurmond 115 kV tie. Only the Thurmond endpoint is located in the sponsor reference; Hooks remains unresolved, so this record does not claim a complete route. The workbook publishes the December 2024 in-service target, while the March-December construction window is inferred using the repository's minimum transmission-upgrade convention and is not a utility-published build schedule.",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "GridSync transcription of Sperry Tech starter data",
+          "retrieved": "2026-09-27",
+          "quote": "DESC_2: Hooks unresolved; Thurmond 33.660127, -82.195931; in-service target 2024-12-31."
+        }
+      ]
+    },
+    {
+      "id": "desc-queensboro-ft-johnson-bayfront-115kv",
+      "utility": "dominion-energy-south-carolina",
+      "name": "Queensboro-Ft Johnson / Queensboro-Bayfront 115 kV rebuild",
+      "type": "transmission_line_upgrade",
+      "voltageKv": 115,
+      "capacityMw": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-79.967332, 32.722793]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2023-03",
+        "end": "2023-12",
+        "precision": "estimated"
+      },
+      "inService": "2023-12",
+      "status": "planned",
+      "description": "Queensboro-Ft Johnson and Queensboro-Bayfront 115 kV work on the Queensboro-James Island section. Only Queensboro is located in the sponsor reference; Ft Johnson remains unresolved, so this record does not claim a complete route. The workbook publishes the December 2023 in-service target, while the March-December construction window is inferred using the repository's minimum transmission-upgrade convention and is not a utility-published build schedule.",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "GridSync transcription of Sperry Tech starter data",
+          "retrieved": "2026-09-27",
+          "quote": "DESC_4: Queensboro 32.722793, -79.967332; Ft Johnson unresolved; in-service target 2023-12-31."
+        }
+      ]
+    },
+    {
+      "id": "desc-okatie-bluffton-115kv-rebuild",
+      "utility": "dominion-energy-south-carolina",
+      "name": "Okatie-Bluffton 115 kV rebuild",
+      "type": "transmission_line_upgrade",
+      "voltageKv": 115,
+      "capacityMw": null,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-81.032495, 32.333758],
+          [-80.853384, 32.235027]
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2024-09",
+        "end": "2025-06",
+        "precision": "estimated"
+      },
+      "inService": "2025-06",
+      "status": "planned",
+      "description": "Rebuild the Okatie-Bluffton 115 kV line. Geometry is a straight sponsor-endpoint approximation, not the surveyed route. The workbook publishes the June 2025 in-service target, while the September 2024-June 2025 construction window is inferred using the repository's minimum transmission-upgrade convention and is not a utility-published build schedule.",
+      "state": "SC",
+      "sources": [
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "GridSync transcription of Sperry Tech starter data",
+          "retrieved": "2026-09-27",
+          "quote": "DESC_5: Okatie 32.333758, -81.032495; Bluffton 32.235027, -80.853384; in-service target 2025-06-01."
+        }
+      ]
+    },
+    {
+      "id": "gp-evans-primary-thurmond-dam-115kv-rebuild",
+      "utility": "georgia-power-co",
+      "name": "Evans Primary-Thurmond Dam #5 115 kV rebuild",
+      "type": "transmission_line_upgrade",
+      "voltageKv": 115,
+      "capacityMw": null,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-82.168648, 33.543994],
+          [-82.195931, 33.660127]
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2032-09",
+        "end": "2033-06",
+        "precision": "estimated"
+      },
+      "inService": "2033-06",
+      "status": "planned",
+      "description": "Rebuild the Evans Primary-Thurmond Dam #5 115 kV line. Geometry is a straight sponsor-endpoint approximation, not the surveyed route. The workbook publishes the June 2033 in-service target, while the September 2032-June 2033 construction window is inferred using the repository's minimum transmission-upgrade convention and is not a utility-published build schedule.",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "GridSync transcription of Sperry Tech starter data",
+          "retrieved": "2026-09-27",
+          "quote": "GPC_1: Evans Primary 33.543994, -82.168648; Thurmond Dam #5 33.660127, -82.195931; in-service target 2033-06-01."
+        }
+      ]
+    },
+    {
+      "id": "gp-mitchell-north-tifton-230kv-reconductor",
+      "utility": "georgia-power-co",
+      "name": "Mitchell-North Tifton 230 kV reconductor",
+      "type": "transmission_line_upgrade",
+      "voltageKv": 230,
+      "capacityMw": null,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-84.133843, 31.447121],
+          [-83.54913, 31.478089]
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2024-08",
+        "end": "2025-05",
+        "precision": "estimated"
+      },
+      "inService": "2025-05",
+      "status": "planned",
+      "description": "Reconductor the Mitchell-North Tifton 230 kV line. Geometry is a straight sponsor-endpoint approximation, not the surveyed route. The workbook publishes the May 2025 in-service target, while the August 2024-May 2025 construction window is inferred using the repository's minimum transmission-upgrade convention and is not a utility-published build schedule.",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "GridSync transcription of Sperry Tech starter data",
+          "retrieved": "2026-09-27",
+          "quote": "GPC_4: Mitchell 31.447121, -84.133843; North Tifton 31.478089, -83.549130; in-service target 2025-05-01."
+        }
+      ]
+    },
+    {
+      "id": "gp-jesup-ludowici-primary-115kv-rebuild",
+      "utility": "georgia-power-co",
+      "name": "Jesup-Ludowici Primary 115 kV rebuild",
+      "type": "transmission_line_upgrade",
+      "voltageKv": 115,
+      "capacityMw": null,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-81.924947, 31.603106],
+          [-81.743703, 31.721597]
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2024-09",
+        "end": "2025-06",
+        "precision": "estimated"
+      },
+      "inService": "2025-06",
+      "status": "planned",
+      "description": "Rebuild the Jesup-Ludowici Primary 115 kV line. Geometry is a straight sponsor-endpoint approximation, not the surveyed route. The workbook publishes the June 2025 in-service target, while the September 2024-June 2025 construction window is inferred using the repository's minimum transmission-upgrade convention and is not a utility-published build schedule.",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "GridSync transcription of Sperry Tech starter data",
+          "retrieved": "2026-09-27",
+          "quote": "GPC_5: Jesup 31.603106, -81.924947; Ludowici Primary 31.721597, -81.743703; in-service target 2025-06-01."
         }
       ]
     }
   ]
 }
-
