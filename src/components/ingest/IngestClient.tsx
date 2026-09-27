@@ -245,13 +245,13 @@ export default function IngestClient({ utilities }: { utilities: UtilityOption[]
                     <p className="text-xs text-muted">{utility.name} · {project.state}</p>
                     <h3 className="mt-1 font-medium">{project.name}</h3>
                   </div>
-                  <div className="rounded-lg bg-share/15 px-3 py-1 font-mono text-lg font-semibold text-share">{overlap.scores.total}/100</div>
+                  <div className="rounded-lg bg-share/15 px-3 py-1 font-mono text-lg font-semibold text-share">{overlap.scores.points}/4 <span className="text-xs">({overlap.scores.normalized}/100)</span></div>
                 </div>
                 <p className="mt-2 text-xs text-muted">
                   {overlap.distanceMiles} mi apart · {overlap.overlapMonths > 0
                     ? `${overlap.overlapMonths} months of construction overlap`
                     : `${overlap.gapMonths} months between windows`}
-                  {" · "}{overlap.kind === "collision_risk" ? "Potential resource contention" : "Sharing opportunity"}
+                  {" · Coordination opportunity"}
                 </p>
                 <ul className="mt-3 list-inside list-disc text-xs leading-5 text-muted">
                   {overlap.reasons.map((reason) => <li key={reason}>{reason}</li>)}

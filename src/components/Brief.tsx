@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Project, Utility } from "@/lib/domain/schema";
-import type { OverlapThresholds } from "@/lib/engine/config";
 import type { Overlap } from "@/lib/engine/overlap";
 
 interface Props {
@@ -11,10 +10,9 @@ interface Props {
   b: Project;
   utilities: Record<string, Utility>;
   shifts: Record<string, number>;
-  params: OverlapThresholds;
 }
 
-export default function Brief({ a, b, shifts, params }: Props) {
+export default function Brief({ a, b, shifts }: Props) {
   const [state, setState] = useState<{ text: string; source: string } | null>(null);
   const [loading, setLoading] = useState(false);
   const [speaking, setSpeaking] = useState(false);
@@ -29,7 +27,7 @@ export default function Brief({ a, b, shifts, params }: Props) {
       const r = await fetch("/api/brief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ a: a.id, b: b.id, shifts, ...params }),
+        body: JSON.stringify({ a: a.id, b: b.id, shifts }),
       });
       const j = await r.json();
       setState(r.ok ? { text: j.text, source: j.source } : { text: j.error ?? "Brief unavailable", source: "error" });

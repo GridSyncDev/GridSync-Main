@@ -1,5 +1,5 @@
 import { loadDataset } from "@/lib/data";
-import { compare, defaultParams } from "@/lib/engine/overlap";
+import { compare, compareOverlaps, defaultParams } from "@/lib/engine/overlap";
 import { groundDraft } from "@/lib/ingestion/grounding";
 import { validateReviewedProject } from "@/lib/ingestion/normalize";
 
@@ -30,7 +30,7 @@ export async function POST(request: Request) {
   const matches = projects.flatMap((existing) => {
     const overlap = compare(project, existing, { ...defaultParams, parents });
     return overlap ? [{ overlap, project: existing, utility: utilityById.get(existing.utility) }] : [];
-  }).sort((a, b) => b.overlap.scores.total - a.overlap.scores.total);
+  }).sort((a, b) => compareOverlaps(a.overlap, b.overlap));
 
   return Response.json({ project, count: matches.length, matches: matches.slice(0, 10) });
 }

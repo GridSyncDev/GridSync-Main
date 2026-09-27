@@ -1,16 +1,10 @@
 import { candidateOverlaps } from "@/lib/db";
-import { overlapDefaults } from "@/lib/engine/config";
+import { coordinationThresholdsKm } from "@/lib/engine/config";
 
-// GET /api/candidates: optional thresholds use engine/config.ts.
-// Candidate pairs computed inside PostGIS (ST_DWithin on real geometries + daterange overlap).
-export async function GET(request: Request) {
+// Candidate pairs use the frozen 40 km gate on real PostGIS geometries.
+export async function GET(_request: Request) {
+  void _request;
   if (!process.env.DATABASE_URL) return Response.json({ error: "DATABASE_URL not set" }, { status: 501 });
-  const q = new URL(request.url).searchParams;
-  const n = (k: string, d: number) => (q.has(k) && Number.isFinite(Number(q.get(k))) ? Number(q.get(k)) : d);
-  const rows = await candidateOverlaps(
-    n("maxMiles", overlapDefaults.maxMiles),
-    n("maxGapMonths", overlapDefaults.maxGapMonths),
-    n("regionMiles", overlapDefaults.regionMiles),
-  );
-  return Response.json({ source: "postgis", count: rows.length, candidates: rows });
+  const rows = await candidateOverlaps();
+  return Response.json({ source: "postgis", thresholdKm: coordinationThresholdsKm.candidate, count: rows.length, candidates: rows });
 }

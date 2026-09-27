@@ -1,12 +1,19 @@
+import { projectFamiliesFor, sharedProjectFamilies, type ProjectFamily } from "../domain/projectFamilies";
+import { resourcesFor } from "../domain/resources";
 import type { Project } from "../domain/schema";
-import { overlapDefaults, type OverlapThresholds } from "./config";
-import { resourcesFor, scarceResources, voltageClass } from "../domain/resources";
+import {
+  coordinationThresholdsKm,
+  milesToKm,
+  overlapDefaults,
+  type OverlapThresholds,
+} from "./config";
 import { distanceMiles } from "./geo";
-import { addMonths, durationMonths, gapMonths, overlapMonths, type Interval } from "./time";
+import { geometriesTouchOrCross } from "./intersection";
+import { addMonths, gapMonths, overlapMonths, type Interval } from "./time";
 
-// Deterministic, explainable overlap scoring. No LLM touches these numbers.
+// Deterministic, explainable coordination scoring. No LLM touches these numbers.
 
-export interface OverlapParams extends OverlapThresholds {
+export interface OverlapParams extends Partial<OverlapThresholds> {
   /** What-if: months to shift a project's construction window, by project id. */
   shifts?: Record<string, number>;
   /** Utility id -> holding company. Sister utilities are skipped unless includeAffiliates. */
@@ -14,116 +21,173 @@ export interface OverlapParams extends OverlapThresholds {
   includeAffiliates?: boolean;
 }
 
-// Compatibility alias for existing engine callers.
+// Threshold fields are compatibility aliases only; compare() always uses the frozen rubric.
 export const defaultParams: Readonly<OverlapParams> = overlapDefaults;
 
-export const weights = { spatial: 0.35, temporal: 0.3, resource: 0.25, asset: 0.1 } as const;
+export type CoordinationPointKey = "outageCoordination" | "rowAccessPermitting" | "siteLogistics" | "crewEquipment";
+
+export interface CoordinationPoint {
+  earned: boolean;
+  points: 0 | 1;
+  explanation: string;
+  usesEstimatedSchedule: boolean;
+}
 
 export interface Overlap {
   id: string;
-  a: string; // project id
+  a: string;
   b: string;
+  /** `temporal` means actual construction-window overlap; adjacency is separate. */
   flags: ("spatial" | "temporal")[];
-  /** The Sperry case: neighboring utilities in different states. */
   crossesStateLine: boolean;
+  /** Kept for existing clients. The frozen model emits coordination opportunities only. */
   kind: "sharing_opportunity" | "collision_risk";
   distanceMiles: number;
+  distanceKm: number;
   overlapMonths: number;
   gapMonths: number;
+  actualTimelineOverlap: boolean;
+  immediatelySequential: boolean;
+  mobilizationCompatible: boolean;
+  geometriesIntersect: boolean;
+  scheduleIsEstimated: boolean;
+  families: { a: ProjectFamily[]; b: ProjectFamily[]; shared: ProjectFamily[] };
+  /** Descriptive metadata only; resources do not affect score or rank. */
   sharedResources: string[];
-  scarceShared: string[];
-  scores: { spatial: number; temporal: number; resource: number; asset: number; total: number };
+  scores: {
+    points: number;
+    maxPoints: 4;
+    normalized: number;
+    /** Backward-compatible 0–100 display value. */
+    total: number;
+    breakdown: Record<CoordinationPointKey, CoordinationPoint>;
+  };
   reasons: string[];
 }
 
-export function windowOf(p: Project, shifts?: Record<string, number>): Interval {
-  const s = shifts?.[p.id] ?? 0;
-  return { start: addMonths(p.construction.start, s), end: addMonths(p.construction.end, s) };
+export function windowOf(project: Project, shifts?: Record<string, number>): Interval {
+  const shift = shifts?.[project.id] ?? 0;
+  return { start: addMonths(project.construction.start, shift), end: addMonths(project.construction.end, shift) };
 }
 
-const round = (n: number, d = 1) => Math.round(n * 10 ** d) / 10 ** d;
-const clamp01 = (n: number) => Math.max(0, Math.min(1, n));
+const round = (value: number, digits = 3) => Math.round(value * 10 ** digits) / 10 ** digits;
+const boundaryTolerance = (threshold: number) => Math.max(1, threshold) * Number.EPSILON * 16;
+const withinInclusive = (value: number, threshold: number) => value <= threshold + boundaryTolerance(threshold);
+const strictlyUnder = (value: number, threshold: number) => value < threshold - boundaryTolerance(threshold);
+const point = (earned: boolean, explanation: string, usesEstimatedSchedule = false): CoordinationPoint => ({
+  earned,
+  points: earned ? 1 : 0,
+  explanation,
+  usesEstimatedSchedule: earned && usesEstimatedSchedule,
+});
+
+function timingReason(actualOverlap: boolean, immediatelySequential: boolean, overlap: number, gap: number, estimated: boolean): string {
+  if (actualOverlap) {
+    return `${estimated ? "Estimated construction windows" : "Construction windows"} overlap by ${overlap} months.`;
+  }
+  if (immediatelySequential) {
+    return estimated
+      ? "Estimated construction schedules are immediately sequential — potential direct logistics or crew handoff."
+      : "Immediately sequential schedules — potential direct logistics or crew handoff.";
+  }
+  return `${estimated ? "Estimated construction windows are" : "Construction windows are"} ${gap} months apart.`;
+}
 
 export function compare(a: Project, b: Project, params: OverlapParams = defaultParams): Overlap | null {
   if (a.utility === b.utility) return null;
-  const pa = params.parents?.[a.utility];
-  if (!params.includeAffiliates && pa && pa === params.parents?.[b.utility]) return null;
+  const parent = params.parents?.[a.utility];
+  if (!params.includeAffiliates && parent && parent === params.parents?.[b.utility]) return null;
+  if (a.type.startsWith("generation_") || b.type.startsWith("generation_")) return null;
 
-  const dist = distanceMiles(a.geometry, b.geometry);
-  const wa = windowOf(a, params.shifts);
-  const wb = windowOf(b, params.shifts);
-  const overlap = overlapMonths(wa, wb);
-  const gap = gapMonths(wa, wb);
+  // Keep the established closest-point engine as the sole source of distance.
+  const exactDistanceMiles = distanceMiles(a.geometry, b.geometry);
+  const distanceKm = milesToKm(exactDistanceMiles);
+  if (!withinInclusive(distanceKm, coordinationThresholdsKm.candidate)) return null;
 
-  const close = dist <= params.maxMiles;
-  const sameTime = gap <= params.maxGapMonths && dist <= params.regionMiles;
-  if (!close && !sameTime) return null;
-
-  const ra = resourcesFor(a);
-  const rb = resourcesFor(b);
-  const shared = ra.filter((r) => rb.includes(r));
-  const union = new Set([...ra, ...rb]);
-  const scarceShared = shared.filter((r) => scarceResources.has(r));
-
-  // Spatial: 1 at 0 mi, 0 at the region edge.
-  const spatial = clamp01(1 - dist / params.regionMiles);
-  // Temporal: share of the shorter window that overlaps; if apart, decays to 0 at 2× maxGap.
-  const temporal =
-    overlap > 0
-      ? overlap / Math.min(durationMonths(wa), durationMonths(wb))
-      : 0.5 * clamp01(1 - gap / (2 * Math.max(1, params.maxGapMonths)));
-  const resource = union.size ? shared.length / union.size : 0;
-  const va = voltageClass(a.voltageKv);
-  const vb = voltageClass(b.voltageKv);
-  const asset = va === null || vb === null ? 0.5 : va === vb ? 1 : 0.3;
-
-  const total =
-    weights.spatial * spatial + weights.temporal * temporal + weights.resource * resource + weights.asset * asset;
-
-  const flags: Overlap["flags"] = [];
-  if (close) flags.push("spatial");
-  if (sameTime) flags.push("temporal");
-
-  const reasons: string[] = [];
-  reasons.push(close ? `${round(dist)} mi apart (within ${params.maxMiles} mi)` : `${round(dist)} mi apart, same regional market`);
-  reasons.push(
-    overlap > 0 ? `construction windows overlap by ${overlap} months` : `construction windows are ${gap} months apart`,
-  );
-  if (shared.length) reasons.push(`both need ${shared.length} of the same resource types`);
-  if (a.state !== b.state) reasons.push(`crosses the ${a.state}–${b.state} state line: separate planning processes`);
-  if (scarceShared.length) reasons.push(`potential competition for shared constrained resource types: ${scarceShared.join(", ")}`);
+  const windowA = windowOf(a, params.shifts);
+  const windowB = windowOf(b, params.shifts);
+  const overlap = overlapMonths(windowA, windowB);
+  const gap = gapMonths(windowA, windowB);
+  const actualTimelineOverlap = overlap > 0;
+  const immediatelySequential = overlap === 0 && gap === 0;
+  const mobilizationCompatible = actualTimelineOverlap || immediatelySequential;
+  const intersects = geometriesTouchOrCross(a.geometry, b.geometry);
+  const estimatedSchedule = a.construction.precision === "estimated" || b.construction.precision === "estimated";
+  const sharedFamilies = sharedProjectFamilies(a, b);
+  const breakdown: Overlap["scores"]["breakdown"] = {
+    outageCoordination: point(
+      intersects && actualTimelineOverlap,
+      "Crossing/touching projects with overlapping construction windows may benefit from coordinated outage timing and crossing work.",
+      estimatedSchedule,
+    ),
+    rowAccessPermitting: point(
+      strictlyUnder(distanceKm, coordinationThresholdsKm.rowAccess),
+      "Potential right-of-way, access-road, or permitting coordination.",
+    ),
+    siteLogistics: point(
+      strictlyUnder(distanceKm, coordinationThresholdsKm.siteLogistics) && mobilizationCompatible,
+      "Potential shared site logistics, such as laydown areas or coordinated deliveries.",
+      estimatedSchedule,
+    ),
+    crewEquipment: point(
+      strictlyUnder(distanceKm, coordinationThresholdsKm.candidate) && mobilizationCompatible && sharedFamilies.length > 0,
+      "Potential crew and equipment mobilization coordination.",
+      estimatedSchedule,
+    ),
+  };
+  const points = Object.values(breakdown).reduce((sum, item) => sum + item.points, 0);
+  const normalized = Math.round((points / 4) * 100);
+  const resourcesA = resourcesFor(a);
+  const resourcesB = new Set(resourcesFor(b));
+  const sharedResources = resourcesA.filter((resource) => resourcesB.has(resource));
+  const reasons = [
+    `${round(exactDistanceMiles)} mi (${round(distanceKm)} km) closest-point distance.`,
+    timingReason(actualTimelineOverlap, immediatelySequential, overlap, gap, estimatedSchedule),
+    ...Object.values(breakdown).filter((item) => item.earned).map((item) => item.explanation),
+  ];
+  if (a.state !== b.state) reasons.push(`Cross-state opportunity across the ${a.state}–${b.state} planning boundary.`);
 
   return {
     id: [a.id, b.id].sort().join("__"),
     a: a.id,
     b: b.id,
-    flags,
+    flags: actualTimelineOverlap ? ["spatial", "temporal"] : ["spatial"],
     crossesStateLine: a.state !== b.state,
-    kind: scarceShared.length && overlap > 0 ? "collision_risk" : "sharing_opportunity",
-    distanceMiles: round(dist),
+    kind: "sharing_opportunity",
+    distanceMiles: exactDistanceMiles,
+    distanceKm,
     overlapMonths: overlap,
     gapMonths: gap,
-    sharedResources: shared,
-    scarceShared,
-    scores: {
-      spatial: Math.round(spatial * 100),
-      temporal: Math.round(temporal * 100),
-      resource: Math.round(resource * 100),
-      asset: Math.round(asset * 100),
-      total: Math.round(total * 100),
-    },
+    actualTimelineOverlap,
+    immediatelySequential,
+    mobilizationCompatible,
+    geometriesIntersect: intersects,
+    scheduleIsEstimated: estimatedSchedule,
+    families: { a: projectFamiliesFor(a), b: projectFamiliesFor(b), shared: sharedFamilies },
+    sharedResources,
+    scores: { points, maxPoints: 4, normalized, total: normalized, breakdown },
     reasons,
   };
 }
 
-/** All cross-utility overlaps, highest score first. O(n²) — fine for a few thousand projects. */
+export function compareOverlaps(a: Overlap, b: Overlap): number {
+  return (
+    b.scores.points - a.scores.points ||
+    a.distanceMiles - b.distanceMiles ||
+    Number(b.actualTimelineOverlap) - Number(a.actualTimelineOverlap) ||
+    b.overlapMonths - a.overlapMonths ||
+    a.id.localeCompare(b.id)
+  );
+}
+
+/** All eligible cross-utility pairs, ordered by the deterministic rubric. */
 export function findOverlaps(projects: Project[], params: OverlapParams = defaultParams): Overlap[] {
-  const out: Overlap[] = [];
+  const results: Overlap[] = [];
   for (let i = 0; i < projects.length; i++) {
     for (let j = i + 1; j < projects.length; j++) {
-      const o = compare(projects[i], projects[j], params);
-      if (o) out.push(o);
+      const overlap = compare(projects[i], projects[j], params);
+      if (overlap) results.push(overlap);
     }
   }
-  return out.sort((x, y) => y.scores.total - x.scores.total);
+  return results.sort(compareOverlaps);
 }
