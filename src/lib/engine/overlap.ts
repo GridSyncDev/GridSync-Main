@@ -1,17 +1,12 @@
 import type { Project } from "../domain/schema";
+import { overlapDefaults, type OverlapThresholds } from "./config";
 import { resourcesFor, scarceResources, voltageClass } from "../domain/resources";
 import { distanceMiles } from "./geo";
 import { addMonths, durationMonths, gapMonths, overlapMonths, type Interval } from "./time";
 
 // Deterministic, explainable overlap scoring. No LLM touches these numbers.
 
-export interface OverlapParams {
-  /** Projects within this distance are "physically close". */
-  maxMiles: number;
-  /** Windows this many months apart (or less) count as "around the same time". */
-  maxGapMonths: number;
-  /** A time-only overlap is flagged only inside this radius (same regional labor/equipment market). */
-  regionMiles: number;
+export interface OverlapParams extends OverlapThresholds {
   /** What-if: months to shift a project's construction window, by project id. */
   shifts?: Record<string, number>;
   /** Utility id -> holding company. Sister utilities are skipped unless includeAffiliates. */
@@ -19,7 +14,8 @@ export interface OverlapParams {
   includeAffiliates?: boolean;
 }
 
-export const defaultParams: OverlapParams = { maxMiles: 50, maxGapMonths: 6, regionMiles: 250 };
+// Compatibility alias for existing engine callers.
+export const defaultParams: Readonly<OverlapParams> = overlapDefaults;
 
 export const weights = { spatial: 0.35, temporal: 0.3, resource: 0.25, asset: 0.1 } as const;
 
@@ -95,7 +91,7 @@ export function compare(a: Project, b: Project, params: OverlapParams = defaultP
   );
   if (shared.length) reasons.push(`both need ${shared.length} of the same resource types`);
   if (a.state !== b.state) reasons.push(`crosses the ${a.state}–${b.state} state line: separate planning processes`);
-  if (scarceShared.length) reasons.push(`both draw on constrained resources: ${scarceShared.join(", ")}`);
+  if (scarceShared.length) reasons.push(`potential competition for shared constrained resource types: ${scarceShared.join(", ")}`);
 
   return {
     id: [a.id, b.id].sort().join("__"),

@@ -68,12 +68,15 @@ Run `npm test` after adding data. The loader validates every file.
 `resources` is filled from the resource matrix (`src/lib/domain/resources.ts`).
 
 ### `GET /api/overlaps`
-Query params (all optional):
+Query params (all optional). `src/lib/engine/config.ts` is the authoritative source
+for startup defaults in the engine, frontend, and `/api/overlaps`, `/api/candidates`,
+and `/api/brief`. These preserve the existing frontend defaults; explicit overrides still apply.
+
 | param | default | meaning |
 |---|---|---|
-| `maxMiles` | 50 | pairs within this distance are flagged `spatial` |
+| `maxMiles` | 25 | pairs within this distance are flagged `spatial` |
 | `maxGapMonths` | 6 | windows this close (or overlapping) are flagged `temporal` |
-| `regionMiles` | 250 | time-only flags must still be within this radius |
+| `regionMiles` | 75 | time-only flags must still be within this radius |
 | `utilities` | all | comma-separated utility ids to compare |
 | `shift` | none | what-if: `shift=<projectId>:<months>` (repeatable, negative = earlier) |
 
@@ -101,10 +104,17 @@ Query params (all optional):
 - **temporal**: share of the shorter window that overlaps; if the windows don't overlap, it decays from 0.5 to 0 at 2×`maxGapMonths`
 - **resource**: Jaccard overlap of resource tags
 - **asset**: same voltage class 1, different 0.3, unknown 0.5
-- **kind**: `collision_risk` when the windows overlap and both need a scarce resource (large power transformers, HV breakers, EHV crews, heavy haul), otherwise `sharing_opportunity`
+- **kind**: `collision_risk` when the windows overlap and both need a scarce resource (large power transformers, HV breakers, EHV crews, heavy haul), otherwise `sharing_opportunity`. The internal key remains compatible; user-facing text says **potential resource contention**. Shared resource types suggest potential competition and coordination opportunities, not confirmed shortages or delays.
 
 The LLM never produces these numbers. Gemini (Tier 5) may only extract fields from documents (validated by the schema) and phrase explanations using numbers from the engine.
 
 ## Database
 
 Postgres + PostGIS on Tiger Data (MLH prize, and Sperry's stack). `db/schema.sql` mirrors the contract and has a `candidate_overlaps()` function using `ST_DWithin` on real geometries and `daterange` overlap. Until `DATABASE_URL` is set, the app reads the JSON files, so nothing is blocked on the DB.
+
+SQL callers must pass all three thresholds explicitly. The application supplies
+them from the shared config (or user overrides), so SQL does not duplicate numeric
+defaults. Reapplying `db/schema.sql` transactionally replaces only this function to
+remove its old parameter defaults; it does not reload project data. Existing direct
+SQL integrations must pass all three arguments and retain any custom function
+grants when deploying this schema change.

@@ -1,7 +1,8 @@
 import { loadDataset } from "@/lib/data";
-import { defaultParams, findOverlaps, type OverlapParams } from "@/lib/engine/overlap";
+import { overlapDefaults } from "@/lib/engine/config";
+import { findOverlaps, type OverlapParams } from "@/lib/engine/overlap";
 
-// GET /api/overlaps?maxMiles=50&maxGapMonths=6&regionMiles=250&shift=<projectId>:<months>&utilities=a,b
+// Optional thresholds use engine/config.ts; shift=<projectId>:<months>&utilities=a,b.
 export async function GET(request: Request) {
   const q = new URL(request.url).searchParams;
   const num = (k: string, d: number) => {
@@ -14,9 +15,9 @@ export async function GET(request: Request) {
     if (id && Number.isFinite(Number(months))) shifts[id] = Number(months);
   }
   const params: OverlapParams = {
-    maxMiles: num("maxMiles", defaultParams.maxMiles),
-    maxGapMonths: num("maxGapMonths", defaultParams.maxGapMonths),
-    regionMiles: num("regionMiles", defaultParams.regionMiles),
+    maxMiles: num("maxMiles", overlapDefaults.maxMiles),
+    maxGapMonths: num("maxGapMonths", overlapDefaults.maxGapMonths),
+    regionMiles: num("regionMiles", overlapDefaults.regionMiles),
     shifts,
   };
 
