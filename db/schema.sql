@@ -45,24 +45,24 @@ CREATE TABLE IF NOT EXISTS sources (
   page       int
 );
 
--- Candidate overlaps straight from the database: cross-utility pairs that are
--- physically close (ST_DWithin on the real geometries, lines included) or scheduled
--- around the same time. Scoring stays in src/lib/engine/overlap.ts so the what-if
--- slider can re-score instantly in the browser.
--- SQL owns no threshold defaults; application callers pass all three from engine/config.ts.
--- PostgreSQL requires replacement to remove existing parameter defaults.
+-- Candidate overlaps straight from the database: eligible cross-utility
+-- transmission/substation pairs inside the frozen geographic gate. ST_DWithin evaluates
+-- the stored geometries (lines included), not centers or centroids. Scoring and
+-- schedule compatibility remain in src/lib/engine/overlap.ts.
+-- SQL owns no threshold default; the application passes the canonical kilometer value.
 -- Replace only this function transactionally; no table data is changed.
 BEGIN;
 DROP FUNCTION IF EXISTS candidate_overlaps(real, integer, real);
-CREATE FUNCTION candidate_overlaps(max_miles real, max_gap_months int, region_miles real)
+DROP FUNCTION IF EXISTS candidate_overlaps(real);
+CREATE FUNCTION candidate_overlaps(max_km real)
 RETURNS TABLE (a text, b text, distance_miles real, overlap_days int) LANGUAGE sql STABLE AS $$
   SELECT p.id, q.id,
          (ST_Distance(p.geom, q.geom) / 1609.344)::real,
          GREATEST(0, upper(p.construction * q.construction) - lower(p.construction * q.construction))::int
   FROM projects p
   JOIN projects q ON p.id < q.id AND p.utility_id <> q.utility_id
-  WHERE ST_DWithin(p.geom, q.geom, max_miles * 1609.344)
-     OR (ST_DWithin(p.geom, q.geom, region_miles * 1609.344)
-         AND daterange((lower(p.construction) - make_interval(months => max_gap_months))::date, (upper(p.construction) + make_interval(months => max_gap_months))::date) && q.construction)
+  WHERE p.type IN ('transmission_line_new', 'transmission_line_upgrade', 'substation_new', 'substation_upgrade')
+    AND q.type IN ('transmission_line_new', 'transmission_line_upgrade', 'substation_new', 'substation_upgrade')
+    AND ST_DWithin(p.geom, q.geom, max_km * 1000)
 $$;
 COMMIT;

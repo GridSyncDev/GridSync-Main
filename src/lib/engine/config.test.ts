@@ -1,76 +1,79 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 import pg from "pg";
-import { GET as overlapsGET } from "../../app/api/overlaps/route";
 import { GET as candidatesGET } from "../../app/api/candidates/route";
+import { GET as overlapsGET } from "../../app/api/overlaps/route";
 import { factSheet, template } from "../brief";
 import { loadJsonDataset } from "../data";
 import { KIND } from "../ui/format";
-import { overlapDefaults } from "./config";
-import { compare, defaultParams, findOverlaps, type OverlapParams } from "./overlap";
+import { coordinationThresholdsKm, coordinationThresholdsMiles, overlapDefaults } from "./config";
+import { compare, findOverlaps, type OverlapParams } from "./overlap";
 
-test("overlap API defaults and explicit overrides match the shared engine on real data", async () => {
+test("overlap API uses frozen thresholds and ignores legacy distance overrides", async () => {
   const previousUrl = process.env.DATABASE_URL;
   delete process.env.DATABASE_URL;
   try {
     const dataset = await loadJsonDataset();
     const utilityIds = ["homestead-public-services", "florida-power-light-co"];
-    const projects = dataset.projects.filter((p) => utilityIds.includes(p.utility));
-    assert.ok(projects.length > 1);
-    assert.equal(defaultParams, overlapDefaults);
-    assert.deepEqual(overlapDefaults, { maxMiles: 25, maxGapMonths: 0, regionMiles: 25 });
-    for (const overrides of [null, { maxMiles: 50, maxGapMonths: 0, regionMiles: 250 }]) {
-      const query = new URLSearchParams({ utilities: utilityIds.join(",") });
-      if (overrides) for (const [key, value] of Object.entries(overrides)) query.set(key, String(value));
-      const response = await overlapsGET(new Request("http://localhost/api/overlaps?" + query));
-      const body = await response.json();
-      const expected: OverlapParams = { ...(overrides ?? overlapDefaults), shifts: {} };
-      assert.equal(response.status, 200);
-      assert.deepEqual(body.params, expected);
-      assert.deepEqual(body.overlaps, findOverlaps(projects, expected));
-      assert.equal(body.count, body.overlaps.length);
-    }
+    const projects = dataset.projects.filter((project) => utilityIds.includes(project.utility));
+    const query = new URLSearchParams({
+      utilities: utilityIds.join(","),
+      maxMiles: "999",
+      maxGapMonths: "24",
+      regionMiles: "999",
+    });
+    const response = await overlapsGET(new Request("http://localhost/api/overlaps?" + query));
+    const body = await response.json();
+    const expected: OverlapParams = { ...overlapDefaults, shifts: {} };
+    assert.equal(response.status, 200);
+    assert.deepEqual(body.params, expected);
+    assert.deepEqual(body.thresholdsKm, coordinationThresholdsKm);
+    assert.deepEqual(body.overlaps, findOverlaps(projects, expected));
+    assert.equal(body.count, body.overlaps.length);
+    assert.equal(overlapDefaults.maxMiles, coordinationThresholdsMiles.candidate);
+    assert.equal(overlapDefaults.regionMiles, coordinationThresholdsMiles.candidate);
   } finally {
     if (previousUrl === undefined) delete process.env.DATABASE_URL;
     else process.env.DATABASE_URL = previousUrl;
   }
 });
 
-test("candidate API passes shared defaults and explicit overrides to PostGIS", async (t) => {
+test("candidate API passes the canonical 40 km gate to PostGIS and ignores overrides", async (t) => {
   const previousUrl = process.env.DATABASE_URL;
   process.env.DATABASE_URL = "postgresql://test:test@localhost/test";
   const calls: unknown[][] = [];
   t.mock.method(pg.Pool.prototype, "query", async (sql: string, values: unknown[]) => {
-    assert.equal(sql, "SELECT * FROM candidate_overlaps($1, $2, $3)");
+    assert.equal(sql, "SELECT * FROM candidate_overlaps($1)");
     calls.push(values);
     return { rows: [] };
   });
   try {
-    await candidatesGET(new Request("http://localhost/api/candidates"));
-    await candidatesGET(new Request("http://localhost/api/candidates?maxMiles=40&maxGapMonths=0&regionMiles=90"));
-    assert.deepEqual(calls, [
-      [overlapDefaults.maxMiles, overlapDefaults.maxGapMonths, overlapDefaults.regionMiles],
-      [40, 0, 90],
-    ]);
+    const first = await candidatesGET(new Request("http://localhost/api/candidates"));
+    const second = await candidatesGET(new Request("http://localhost/api/candidates?maxMiles=999&regionMiles=999"));
+    assert.deepEqual(calls, [[coordinationThresholdsKm.candidate], [coordinationThresholdsKm.candidate]]);
+    assert.equal((await first.json()).thresholdKm, 40);
+    assert.equal((await second.json()).thresholdKm, 40);
   } finally {
     if (previousUrl === undefined) delete process.env.DATABASE_URL;
     else process.env.DATABASE_URL = previousUrl;
   }
 });
 
-test("contention wording preserves the internal kind and qualifies brief claims", async () => {
+test("briefs expose raw and normalized deterministic scoring without contention claims", async () => {
   const { projects, utilities } = await loadJsonDataset();
-  const a = projects.find((p) => p.type === "substation_new")!;
+  const a = projects.find((project) => project.type === "substation_new")!;
   assert.ok(a);
-  const b = { ...a, id: "contention-test", utility: "contention-test-utility" };
+  const b = { ...a, id: "coordination-test", utility: "coordination-test-utility" };
   const overlap = compare(a, b)!;
-  assert.equal(overlap.kind, "collision_risk");
-  assert.equal(KIND[overlap.kind].label, "Potential resource contention");
+  assert.equal(overlap.kind, "sharing_opportunity");
+  assert.equal(KIND[overlap.kind].label, "Coordination opportunity");
   const facts = factSheet(overlap, a, b, {}).join("\n");
-  assert.match(facts, /Classification: Potential resource contention/);
-  assert.doesNotMatch(facts, /collision risk/i);
-  const ua = utilities.find((u) => u.id === a.utility)!;
-  const text = template(overlap, a, b, ua, { ...ua, id: b.utility, name: "Test utility" }, {});
-  assert.match(text, /potential resource contention/);
-  assert.match(text, /without establishing an actual shortage or delay/);
+  assert.match(facts, /Raw coordination score: \d out of 4/);
+  assert.match(facts, /Normalized display score: \d+ out of 100/);
+  assert.match(facts, /descriptive, not scored/);
+  assert.doesNotMatch(facts, /collision risk|potential resource contention/i);
+  const utility = utilities.find((item) => item.id === a.utility)!;
+  const text = template(overlap, a, b, utility, { ...utility, id: b.utility, name: "Test utility" }, {});
+  assert.match(text, /coordination|joint planning/i);
+  assert.doesNotMatch(text, /will delay|confirmed shortage|collision risk/i);
 });

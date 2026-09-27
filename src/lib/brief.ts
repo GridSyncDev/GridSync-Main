@@ -5,34 +5,47 @@ import type { Project, Utility } from "./domain/schema";
 import { windowOf, type Overlap } from "./engine/overlap";
 import { KIND, fmtMonth, typeLabel } from "./ui/format";
 
-// Coordination brief for a planner. Gemini only phrases the engine's facts; any number in its
-// text that isn't in the fact sheet gets the brief replaced by a deterministic template.
-
+// Gemini may phrase engine facts, but it never creates or changes the score.
 export type Brief = { text: string; source: "ai" | "template" };
+
+const POINT_LABELS: Record<keyof Overlap["scores"]["breakdown"], string> = {
+  outageCoordination: "crossing/outage coordination",
+  rowAccessPermitting: "right-of-way/access/permitting",
+  siteLogistics: "site logistics",
+  crewEquipment: "crew/equipment mobilization",
+};
 
 export function factSheet(o: Overlap, a: Project, b: Project, shifts: Record<string, number>) {
   const wa = windowOf(a, shifts);
   const wb = windowOf(b, shifts);
-  const lines = [
+  const timing = o.actualTimelineOverlap
+    ? `${o.scheduleIsEstimated ? "Estimated construction windows" : "Construction windows"} overlap: ${o.overlapMonths} months`
+    : o.immediatelySequential
+      ? `${o.scheduleIsEstimated ? "Estimated construction schedules are" : "Construction schedules are"} immediately sequential; this is not an overlapping construction window`
+      : `${o.scheduleIsEstimated ? "Estimated gap" : "Gap"} between construction windows: ${o.gapMonths} months`;
+  const earned = Object.entries(o.scores.breakdown)
+    .filter(([, item]) => item.earned)
+    .map(([key]) => POINT_LABELS[key as keyof typeof POINT_LABELS]);
+  return [
     `Project A: ${a.name} (${typeLabel[a.type]}${a.voltageKv ? `, ${a.voltageKv} kV` : ""}${a.capacityMw ? `, ${a.capacityMw} MW` : ""}), state ${a.state}, construction ${fmtMonth(wa.start)} to ${fmtMonth(wa.end)} (${a.construction.precision})`,
     `Project B: ${b.name} (${typeLabel[b.type]}${b.voltageKv ? `, ${b.voltageKv} kV` : ""}${b.capacityMw ? `, ${b.capacityMw} MW` : ""}), state ${b.state}, construction ${fmtMonth(wb.start)} to ${fmtMonth(wb.end)} (${b.construction.precision})`,
-    `Distance: ${o.distanceMiles} miles`,
-    o.overlapMonths ? `Construction windows overlap: ${o.overlapMonths} months` : `Gap between construction windows: ${o.gapMonths} months`,
-    `Coordination score: ${o.scores.total} out of 100 (spatial ${o.scores.spatial}, schedule ${o.scores.temporal}, resources ${o.scores.resource}, asset ${o.scores.asset})`,
+    `Closest-point distance: ${o.distanceMiles.toFixed(3)} miles (${o.distanceKm.toFixed(3)} kilometers)`,
+    timing,
+    `Raw coordination score: ${o.scores.points} out of ${o.scores.maxPoints}`,
+    `Normalized display score: ${o.scores.normalized} out of 100`,
+    `Points earned: ${earned.join("; ") || "none"}`,
     `Classification: ${KIND[o.kind].label}`,
-    "Shared resource types indicate potential competition or coordination opportunities; actual supplier capacity, shortages and project delays are not established.",
+    "The score identifies potential coordination opportunities; it does not establish shortages, delays, savings, or resource availability.",
     `Crosses a state line: ${o.crossesStateLine ? "yes" : "no"}`,
-    `Shared resource needs: ${o.sharedResources.map((r) => resourceLabels[r] ?? r).join("; ") || "none"}`,
-    `Constrained (long-lead) shared resources: ${o.scarceShared.map((r) => resourceLabels[r] ?? r).join("; ") || "none"}`,
+    `Shared resource tags (descriptive, not scored): ${o.sharedResources.map((resource) => resourceLabels[resource] ?? resource).join("; ") || "none"}`,
   ];
-  return lines;
 }
 
-const instructions = `You write short coordination briefs for utility transmission planners. Two utilities published separate construction plans; an engine found an overlap. Write 3 sentences, plain prose, no lists or markdown:
-1) what overlaps (name both utilities and projects, where and when),
-2) the potential resource contention or coordination opportunity suggested by the shared resource types,
-3) one practical next step (e.g. a joint scheduling call, shared mobilization, joint procurement of the constrained items).
-Rules: use only numbers and dates that appear in FACTS, written exactly as given. Do not invent costs, savings, or new numbers. Use "potential resource contention", never "collision risk". Shared resource types do not establish a shortage or a delay. Describe possible competition and coordination opportunities to investigate; do not claim projects will be delayed or that coordination will prevent delays. Be specific and neutral: this is an opportunity to investigate, not proof of waste.`;
+const instructions = `You write short coordination briefs for utility transmission planners. Two utilities published separate construction plans; a deterministic engine identified a coordination opportunity. Write 3 sentences, plain prose, no lists or markdown:
+1) name both utilities and projects and accurately state the closest-point distance and schedule relationship,
+2) summarize only the coordination points that were earned,
+3) propose one practical investigation or coordination step.
+Rules: use only numbers and dates in FACTS, exactly as given. Do not invent costs, savings, shortages, delays, confirmed sharing, or new numbers. Say "coordination opportunity," never "collision risk." Immediately sequential schedules are not overlapping construction windows. If FACTS says a schedule is estimated, make that uncertainty explicit. Resource tags are descriptive and do not affect the score.`;
 
 function numbersIn(text: string): string[] {
   return text.replace(/(\d),(\d{3})/g, "$1$2").match(/\d+(?:\.\d+)?/g) ?? [];
@@ -46,7 +59,7 @@ export async function brief(o: Overlap, a: Project, b: Project, ua: Utility, ub:
       generateText({
         model,
         instructions,
-        prompt: "FACTS:\n" + facts.map((f) => `- ${f}`).join("\n"),
+        prompt: "FACTS:\n" + facts.map((fact) => `- ${fact}`).join("\n"),
         maxRetries: 0,
         maxOutputTokens: 2000,
         abortSignal: AbortSignal.timeout(12_000),
@@ -54,11 +67,11 @@ export async function brief(o: Overlap, a: Project, b: Project, ua: Utility, ub:
       }),
     );
     const clean = text.trim();
-    const bad = numbersIn(clean).filter((n) => !allowed.has(n));
-    if (finishReason === "stop" && /[.!?]$/.test(clean) && bad.length === 0) return { text: clean, source: "ai" };
-    console.warn("brief: rejected model text", { finishReason, ungrounded: bad });
-  } catch (err) {
-    console.warn("brief: model unavailable, using template", err instanceof Error ? err.message : err);
+    const ungrounded = numbersIn(clean).filter((number) => !allowed.has(number));
+    if (finishReason === "stop" && /[.!?]$/.test(clean) && ungrounded.length === 0) return { text: clean, source: "ai" };
+    console.warn("brief: rejected model text", { finishReason, ungrounded });
+  } catch (error) {
+    console.warn("brief: model unavailable, using template", error instanceof Error ? error.message : error);
   }
   return { text: template(o, a, b, ua, ub, shifts), source: "template" };
 }
@@ -66,16 +79,18 @@ export async function brief(o: Overlap, a: Project, b: Project, ua: Utility, ub:
 export function template(o: Overlap, a: Project, b: Project, ua: Utility, ub: Utility, shifts: Record<string, number>): string {
   const wa = windowOf(a, shifts);
   const wb = windowOf(b, shifts);
-  const when = o.overlapMonths
-    ? `their construction windows overlap by ${o.overlapMonths} months`
-    : `their construction windows are ${o.gapMonths} months apart`;
-  const shared = o.sharedResources.map((r) => (resourceLabels[r] ?? r).toLowerCase()).join(", ");
-  const scarce = o.scarceShared.map((r) => (resourceLabels[r] ?? r).toLowerCase()).join(" and ");
+  const timing = o.actualTimelineOverlap
+    ? `${o.scheduleIsEstimated ? "their estimated construction windows" : "their construction windows"} overlap by ${o.overlapMonths} months`
+    : o.immediatelySequential
+      ? `${o.scheduleIsEstimated ? "their estimated schedules" : "their schedules"} are immediately sequential rather than overlapping`
+      : `${o.scheduleIsEstimated ? "their estimated construction windows" : "their construction windows"} are ${o.gapMonths} months apart`;
+  const earned = Object.values(o.scores.breakdown).filter((item) => item.earned).map((item) => item.explanation);
+  const opportunity = earned.length
+    ? earned.join(" ")
+    : "The frozen rubric assigns no specific coordination point to this geographically eligible pair.";
   return [
-    `${ua.name}'s ${a.name} (${fmtMonth(wa.start)} to ${fmtMonth(wa.end)}) and ${ub.name}'s ${b.name} (${fmtMonth(wb.start)} to ${fmtMonth(wb.end)}) are ${o.distanceMiles} miles apart, and ${when}.`,
-    shared ? `Their shared resource needs (${shared}${scarce ? `, including constrained ${scarce}` : ""}) suggest potential ${o.kind === "collision_risk" ? "resource contention" : "coordination opportunities"}, without establishing an actual shortage or delay.` : "They draw on different resources.",
-    o.kind === "collision_risk"
-      ? `Next step: a joint scheduling call to investigate resource availability and opportunities for staggered schedules or joint procurement.`
-      : `Next step: a joint scheduling call to explore shared crew mobilization and equipment staging.`,
+    `${ua.name}'s ${a.name} (${fmtMonth(wa.start)} to ${fmtMonth(wa.end)}, ${a.construction.precision}) and ${ub.name}'s ${b.name} (${fmtMonth(wb.start)} to ${fmtMonth(wb.end)}, ${b.construction.precision}) have a ${o.distanceMiles.toFixed(3)}-mile closest-point distance, and ${timing}.`,
+    opportunity,
+    "Next step: confirm schedule and site details in a joint planning call before drawing conclusions about resource availability, delays, or savings.",
   ].join(" ");
 }

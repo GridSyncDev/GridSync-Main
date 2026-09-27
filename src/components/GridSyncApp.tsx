@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import type { Dataset, Project } from "@/lib/domain/schema";
-import { overlapDefaults } from "@/lib/engine/config";
+import { coordinationThresholdsKm, coordinationThresholdsMiles } from "@/lib/engine/config";
 import { compare, findOverlaps, windowOf, type Overlap, type OverlapParams } from "@/lib/engine/overlap";
 import { addMonths, toIndex } from "@/lib/engine/time";
 import { KIND } from "@/lib/ui/format";
@@ -31,9 +31,6 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
     return c;
   }, [projects]);
 
-  const [maxMiles, setMaxMiles] = useState(overlapDefaults.maxMiles);
-  const [maxGapMonths, setMaxGapMonths] = useState(overlapDefaults.maxGapMonths);
-  const [regionMiles, setRegionMiles] = useState(overlapDefaults.regionMiles);
   const [includeAffiliates, setIncludeAffiliates] = useState(false);
   const [onlyCrossState, setOnlyCrossState] = useState(false);
   const [onlyBoth, setOnlyBoth] = useState(false);
@@ -48,25 +45,25 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
   const [preset, setPreset] = useState<PresetKey>("southeast");
   const [flyTo, setFlyTo] = useState<FlyTarget>({ ...PRESETS.southeast.fly, key: 0 });
 
-  const params: OverlapParams = { maxMiles, maxGapMonths, regionMiles, shifts, parents, includeAffiliates };
+  const params: OverlapParams = { shifts, parents, includeAffiliates };
   const visible = useMemo(() => projects.filter((p) => enabled.has(p.utility)), [projects, enabled]);
   const overlaps = useMemo(
     () => findOverlaps(visible, params),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [visible, maxMiles, maxGapMonths, regionMiles, shifts, parents, includeAffiliates],
+    [visible, shifts, parents, includeAffiliates],
   );
   const list = useMemo(
     () =>
       overlaps.filter(
         (o) =>
           (!onlyCrossState || o.crossesStateLine) &&
-          (!onlyBoth || o.flags.length === 2) &&
+          (!onlyBoth || o.actualTimelineOverlap) &&
           (!selectedProjectId || o.a === selectedProjectId || o.b === selectedProjectId),
       ),
     [overlaps, onlyCrossState, onlyBoth, selectedProjectId],
   );
 
-  // The selected pair stays inspectable even if a what-if shift or slider un-flags it.
+  // The selected pair stays inspectable while a what-if shift changes its score.
   const [selA, selB] = selectedId ? selectedId.split("__") : [null, null];
   const pa = selA ? byId[selA] : null;
   const pb = selB ? byId[selB] : null;
@@ -137,8 +134,8 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
     projects: visible.length,
     utilities: new Set(visible.map((p) => p.utility)).size,
     overlaps: overlaps.length,
-    both: overlaps.filter((o) => o.flags.length === 2).length,
-    collisions: overlaps.filter((o) => o.kind === "collision_risk").length,
+    both: overlaps.filter((o) => o.actualTimelineOverlap).length,
+    highScore: overlaps.filter((o) => o.scores.points >= 3).length,
     interstate: overlaps.filter((o) => o.crossesStateLine).length,
   };
 
@@ -176,9 +173,9 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
         <div className="ml-auto flex items-center gap-5 font-mono text-xs">
           <Stat n={stats.projects} label="projects" />
           <Stat n={stats.utilities} label="utilities" />
-          <Stat n={stats.overlaps} label="flagged" />
-          <Stat n={stats.both} label="near + concurrent" color="var(--share)" />
-          <Stat n={stats.collisions} label={KIND.collision_risk.label} color="var(--collide)" />
+          <Stat n={stats.overlaps} label="eligible pairs" />
+          <Stat n={stats.both} label="timeline overlap" color="var(--share)" />
+          <Stat n={stats.highScore} label="score 3–4" color="var(--share)" />
           <Stat n={stats.interstate} label="cross-state" color="var(--interstate)" />
         </div>
       </header>
@@ -187,11 +184,11 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
         {/* Sidebar */}
         <aside className="flex w-[340px] shrink-0 flex-col border-r border-line bg-[#0a1020]">
           <div className="space-y-3 border-b border-line p-3">
-            <Slider label="Physically close within" value={maxMiles} min={1} max={100} unit="mi" onChange={setMaxMiles} />
-            <Slider label="Same time: windows within" value={maxGapMonths} min={0} max={24} unit="mo" onChange={setMaxGapMonths} />
-            <Slider label="…and within the same region" value={regionMiles} min={10} max={300} step={5} unit="mi" onChange={setRegionMiles} />
+            <div className="rounded-lg border border-line bg-white/[0.03] px-3 py-2 text-[11px] leading-relaxed text-muted">
+              Frozen v1 rubric · closest-point gate ≤ {coordinationThresholdsKm.candidate} km · four deterministic points
+            </div>
             <div className="flex flex-wrap gap-1.5 text-[11px]">
-              <Toggle on={onlyBoth} onClick={() => setOnlyBoth(!onlyBoth)}>Near + concurrent</Toggle>
+              <Toggle on={onlyBoth} onClick={() => setOnlyBoth(!onlyBoth)}>Actual timeline overlap</Toggle>
               <Toggle on={onlyCrossState} onClick={() => setOnlyCrossState(!onlyCrossState)}>Cross-state only</Toggle>
               <Toggle on={includeAffiliates} onClick={() => setIncludeAffiliates(!includeAffiliates)}>Include sister utilities</Toggle>
               <Toggle on={density} onClick={() => setDensity(!density)}>3D density</Toggle>
@@ -241,7 +238,7 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
             {list.slice(0, 150).map((o) => (
               <OverlapCard key={o.id} o={o} a={byId[o.a]} b={byId[o.b]} colors={utilities} selected={o.id === selectedId} onClick={() => focusPair(o)} />
             ))}
-            {!list.length && <div className="p-4 text-center text-xs text-muted">No overlaps with these settings.</div>}
+            {!list.length && <div className="p-4 text-center text-xs text-muted">No eligible coordination pairs with these filters.</div>}
           </div>
           <div className="border-t border-line px-3 py-2 text-[10px] leading-snug text-muted">
             Data: SERTP 2026 Preliminary Expansion Plan · FPL 2026 Ten-Year Site Plan · FDEP siting · EIA-860M (Jul 2026) · utility
@@ -267,7 +264,7 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
               selectedOverlap={selected}
               selectedProjectId={selectedProjectId}
               activeProjectIds={activeIds}
-              maxMiles={maxMiles}
+              maxMiles={coordinationThresholdsMiles.candidate}
               density={density}
               flyTo={flyTo}
               onSelectOverlap={(id) => {
@@ -313,7 +310,6 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
               b={pb}
               utilities={utilities}
               shifts={shifts}
-              params={{ maxMiles, maxGapMonths, regionMiles }}
               onShift={(id, m) => setShifts((s) => ({ ...s, [id]: m }))}
               onClose={() => setSelectedId(null)}
             />
@@ -349,28 +345,6 @@ function Stat({ n, label, color }: { n: number; label: string; color?: string })
   );
 }
 
-function Slider(props: { label: string; value: number; min: number; max: number; step?: number; unit: string; onChange: (v: number) => void }) {
-  return (
-    <label className="block text-xs">
-      <div className="flex justify-between">
-        <span className="text-muted">{props.label}</span>
-        <span className="font-mono">
-          {props.value} {props.unit}
-        </span>
-      </div>
-      <input
-        type="range"
-        min={props.min}
-        max={props.max}
-        step={props.step ?? 1}
-        value={props.value}
-        onChange={(e) => props.onChange(Number(e.target.value))}
-        className="w-full"
-      />
-    </label>
-  );
-}
-
 function Toggle({ on, onClick, children }: { on: boolean; onClick: () => void; children: React.ReactNode }) {
   return (
     <button
@@ -391,7 +365,7 @@ function OverlapCard({ o, a, b, colors, selected, onClick }: { o: Overlap; a: Pr
     >
       <div className="flex items-center gap-2">
         <span className="grid h-8 w-8 shrink-0 place-items-center rounded-md font-mono text-xs font-semibold" style={{ background: `${k.color}22`, color: k.color }}>
-          {o.scores.total}
+          {o.scores.points}/{o.scores.maxPoints}
         </span>
         <div className="min-w-0 flex-1 text-xs leading-snug">
           {[a, b].map((p) => (
@@ -403,10 +377,9 @@ function OverlapCard({ o, a, b, colors, selected, onClick }: { o: Overlap; a: Pr
         </div>
       </div>
       <div className="mt-1.5 flex flex-wrap gap-x-3 gap-y-0.5 pl-10 font-mono text-[10px] text-muted">
-        <span>{o.distanceMiles} mi</span>
-        <span>{o.overlapMonths ? `${o.overlapMonths} mo overlap` : `${o.gapMonths} mo apart`}</span>
+        <span>{o.distanceMiles.toFixed(2)} mi</span>
+        <span>{o.actualTimelineOverlap ? `${o.overlapMonths} mo overlap` : o.immediatelySequential ? "immediately sequential" : `${o.gapMonths} mo apart`}</span>
         {o.crossesStateLine && <span className="text-interstate">{a.state}⇄{b.state}</span>}
-        {o.kind === "collision_risk" && <span className="text-collide">{KIND.collision_risk.label}</span>}
       </div>
     </button>
   );
@@ -416,10 +389,7 @@ function Legend() {
   return (
     <div className="pointer-events-none absolute bottom-3 left-3 rounded-lg border border-line bg-panel px-3 py-2 text-[11px] backdrop-blur">
       <div className="flex items-center gap-2">
-        <span className="inline-block h-0.5 w-5 rounded" style={{ background: KIND.sharing_opportunity.color }} /> sharing opportunity
-      </div>
-      <div className="flex items-center gap-2">
-        <span className="inline-block h-0.5 w-5 rounded" style={{ background: KIND.collision_risk.color }} /> {KIND.collision_risk.label}
+        <span className="inline-block h-0.5 w-5 rounded" style={{ background: KIND.sharing_opportunity.color }} /> coordination opportunity
       </div>
       <div className="mt-1 flex items-center gap-2 text-muted">
         <span className="inline-block w-5 border-t-2 border-dashed border-slate-400" /> approximate route · ○ county-level site
@@ -439,7 +409,7 @@ function Intro({ onPreset, onClose }: { onPreset: (k: PresetKey) => void; onClos
       <p className="mt-2 text-sm leading-relaxed text-muted">
         GridSync reads their public plans (regional transmission plans, ten-year site plans, siting filings), puts every project on one
         map and timeline, and flags where neighbors plan to build close together or at the same time. These overlaps suggest
-        opportunities to explore shared crews, equipment and long-lead materials, or investigate potential competition for them.
+        potential opportunities for outage, permitting, logistics, crew, or equipment coordination.
       </p>
       <div className="mt-4 grid grid-cols-3 gap-2">
         {(Object.keys(PRESETS) as PresetKey[]).map((k) => (
@@ -464,4 +434,3 @@ function Logo() {
     </svg>
   );
 }
-

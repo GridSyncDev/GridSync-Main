@@ -199,7 +199,12 @@ export default function MapView(props: Props) {
     const style = { background: "rgba(7,11,20,0.95)", color: "#e6edf7", fontSize: "12px", border: "1px solid rgba(148,163,184,0.25)", borderRadius: "8px", padding: "8px 10px", maxWidth: "280px" };
     if (layer.id === "overlaps") {
       const o = object as Overlap;
-      return { html: `<b>${KIND[o.kind].label}</b> · score ${o.scores.total}<br/>${byId[o.a]?.name}<br/>↔ ${byId[o.b]?.name}<br/><span style="color:#8b98ad">${o.distanceMiles} mi · ${o.overlapMonths ? o.overlapMonths + " mo overlap" : o.gapMonths + " mo apart"}</span>`, style };
+      const timing = o.actualTimelineOverlap
+        ? `${o.overlapMonths} mo overlap${o.scheduleIsEstimated ? " (estimated schedule)" : ""}`
+        : o.immediatelySequential
+          ? `immediately sequential${o.scheduleIsEstimated ? " (estimated schedule)" : ""}`
+          : `${o.gapMonths} mo apart${o.scheduleIsEstimated ? " (estimated schedule)" : ""}`;
+      return { html: `<b>${KIND[o.kind].label}</b> · ${o.scores.points}/4 (${o.scores.normalized}/100)<br/>${byId[o.a]?.name}<br/>↔ ${byId[o.b]?.name}<br/><span style="color:#8b98ad">${o.distanceMiles.toFixed(2)} mi closest-point · ${timing}</span>`, style };
     }
     const p = object as Project;
     const u = utilities[p.utility];

@@ -1,6 +1,6 @@
 # GridSync
 
-**Compare utilities' public construction plans and flag where their work overlaps**: physically close, scheduled around the same time, and drawing on the same crews, equipment and materials. Built at ShellHacks 2026 for the Sperry Tech challenge.
+**Compare utilities' public construction plans and identify coordination opportunities** using closest-point geography, schedule relationships, and a deterministic four-point rubric. Built at ShellHacks 2026 for the Sperry Tech challenge.
 
 **Live:** https://gridsync-qp6kd.ondigitalocean.app
 

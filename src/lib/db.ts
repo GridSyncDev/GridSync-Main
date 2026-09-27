@@ -1,5 +1,6 @@
 import pg from "pg";
 import { datasetSchema, type Dataset } from "./domain/schema";
+import { coordinationThresholdsKm } from "./engine/config";
 
 // Postgres + PostGIS (Tiger Data). Only used when DATABASE_URL is set; see src/lib/data.ts.
 
@@ -53,8 +54,8 @@ export interface Candidate {
   overlap_days: number;
 }
 
-/** Cross-utility pairs straight from PostGIS (ST_DWithin + daterange overlap). */
-export async function candidateOverlaps(maxMiles: number, maxGapMonths: number, regionMiles: number): Promise<Candidate[]> {
-  const { rows } = await db().query("SELECT * FROM candidate_overlaps($1, $2, $3)", [maxMiles, maxGapMonths, regionMiles]);
+/** Eligible cross-utility pairs straight from PostGIS using the frozen geographic gate. */
+export async function candidateOverlaps(): Promise<Candidate[]> {
+  const { rows } = await db().query("SELECT * FROM candidate_overlaps($1)", [coordinationThresholdsKm.candidate]);
   return rows;
 }

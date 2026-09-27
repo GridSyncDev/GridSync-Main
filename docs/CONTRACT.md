@@ -68,16 +68,13 @@ Run `npm test` after adding data. The loader validates every file.
 `resources` is filled from the resource matrix (`src/lib/domain/resources.ts`).
 
 ### `GET /api/overlaps`
-Query params (all optional). `src/lib/engine/config.ts` is the authoritative source
-for startup defaults in the engine, frontend, and `/api/overlaps`, `/api/candidates`,
-and `/api/brief`. These are EE-reviewed **GridSync v1 planning heuristics**, not
-universal industry constants; explicit user overrides still apply.
+`src/lib/engine/config.ts` is the single source for the exact sponsor kilometer
+thresholds used by the engine, frontend, and PostGIS. These are frozen GridSync v1
+planning heuristics, not universal industry constants. Distance query overrides are
+ignored; callers may still scope utilities or shift schedules for a what-if analysis.
 
 | param | default | meaning |
 |---|---|---|
-| `maxMiles` | 25 | pairs within this distance are flagged `spatial` |
-| `maxGapMonths` | 0 | overlapping or immediately adjacent construction months qualify for `temporal` |
-| `regionMiles` | 25 | temporal flags use the same radius; no wider regional discovery at v1 defaults |
 | `utilities` | all | comma-separated utility ids to compare |
 | `shift` | none | what-if: `shift=<projectId>:<months>` (repeatable, negative = earlier) |
 
@@ -88,10 +85,22 @@ universal industry constants; explicit user overrides still apply.
   overlaps: {
     id: string; a: string; b: string;              // project ids
     flags: ("spatial" | "temporal")[];
-    kind: "sharing_opportunity" | "collision_risk";
-    distanceMiles: number; overlapMonths: number; gapMonths: number;
-    sharedResources: string[]; scarceShared: string[];
-    scores: { spatial, temporal, resource, asset, total };  // 0–100
+    kind: "sharing_opportunity";                    // compatibility key
+    distanceMiles: number; distanceKm: number;
+    overlapMonths: number; gapMonths: number;
+    actualTimelineOverlap: boolean;
+    immediatelySequential: boolean;
+    mobilizationCompatible: boolean;
+    geometriesIntersect: boolean;
+    scheduleIsEstimated: boolean;
+    families: { a: ProjectFamily[]; b: ProjectFamily[]; shared: ProjectFamily[] };
+    sharedResources: string[];                      // descriptive, not scored
+    scores: {
+      points: number; maxPoints: 4;
+      normalized: number;
+      total: number;                                // normalized compatibility alias
+      breakdown: Record<CoordinationPointKey, CoordinationPoint>;
+    };
     reasons: string[];                              // plain-English, from the numbers
   }[]
 }
@@ -99,18 +108,20 @@ universal industry constants; explicit user overrides still apply.
 
 ## V1 candidate and geometry semantics
 
-At the v1 defaults, a pair must be at most 25 miles apart by the shortest distance
-between its stored project geometries. A pair farther than 25 miles is excluded
-even if its schedules overlap or are immediately adjacent. Same-utility and
-affiliate rules are unchanged. The existing spatial-or-temporal candidate rule
-is retained: nearby projects can still be spatial-only candidates even when their
-schedules are separated. The zero-month gap controls the temporal flag; it does
-not add a new requirement that every spatial candidate must overlap in time.
+Only `transmission_line_new`, `transmission_line_upgrade`, `substation_new`, and
+`substation_upgrade` projects are eligible for scored comparisons. Every other
+canonical type—including generation, distribution, and other—remains in the dataset
+and map but produces no scored pair. Eligible cross-utility pairs must be within
+**40 km inclusive** by the shortest distance between their stored project geometries.
+A pair above 40 km is excluded regardless of schedule. Same-utility and affiliate
+rules are unchanged. A geographically eligible pair may receive zero points;
+schedule compatibility affects only the points whose rules require it.
 
 `gapMonths()` counts whole months strictly between inclusive construction windows.
-For example, a February end followed by a March start has gap 0 and qualifies;
-a February end followed by an April start has gap 1 and does not receive a temporal
-flag with the v1 defaults.
+For example, a February end followed by a March start has gap 0 and is immediately
+sequential. It can support logistics or mobilization points, but is **not** labeled
+as an overlapping construction window. `actualTimelineOverlap` is true only when
+`overlapMonths > 0`; `mobilizationCompatible` is actual overlap or immediate sequence.
 
 Verified in `src/lib/engine/geo.ts`: `distanceMiles()` uses closest-point distance
 between Points/LineStrings, **not center-to-center distance**. Point-to-Point uses
@@ -124,30 +135,38 @@ the supplied geometry, whose real-world precision remains governed by
 not drive candidate discovery. PostGIS uses `ST_DWithin`/`ST_Distance` on the stored
 geographies, likewise not centroids.
 
-The 1/5/25-mile scoring tiers, project-family crew/equipment logic, removal of
-voltage-class scoring or heavy-haul relevance, and ROW explanations under about
-1 mile are deferred to a separate scoring-model PR. Task A changes defaults and
-wording only; score values can change with the new inputs, but the formula is unchanged.
-
 ## Scoring (explainable, no ML)
 
-`total = 0.35·spatial + 0.30·temporal + 0.25·resource + 0.10·asset`
+The raw score is the sum of four deterministic points, so it is always an integer
+from 0 through 4. `scores.total` and `scores.normalized` are the compatibility display
+value `round(points / 4 * 100)`; ranking uses raw points, never percentage weights.
 
-- **spatial**: 1 at 0 mi → 0 at `regionMiles`
-- **temporal**: share of the shorter window that overlaps; otherwise, the existing formula is `0.5 × clamp01(1 - gap / (2 × max(1, maxGapMonths)))`. With a zero-month default gap, adjacent windows still score 0.5; the formula's minimum decay denominator remains unchanged.
-- **resource**: Jaccard overlap of resource tags
-- **asset**: same voltage class 1, different 0.3, unknown 0.5
-- **kind**: `collision_risk` when the windows overlap and both need a scarce resource (large power transformers, HV breakers, EHV crews, heavy haul), otherwise `sharing_opportunity`. The internal key remains compatible; user-facing text says **potential resource contention**. Shared resource types suggest potential competition and coordination opportunities, not confirmed shortages or delays.
+1. **Crossing/outage:** +1 when project geometries touch/cross and construction
+   windows actually overlap.
+2. **ROW/access/permitting:** +1 when closest-point distance is strictly under 1.6 km.
+3. **Site logistics:** +1 when distance is strictly under 8 km and schedules overlap
+   or are immediately sequential. Project families need not match.
+4. **Crews/equipment:** +1 when distance is strictly under 40 km, schedules overlap
+   or are immediately sequential, and the project-family sets intersect.
+
+Transmission line new/upgrade projects belong to `transmission`; substation
+new/upgrade projects belong to `substation`. The representation is a set so a
+future project type may support multiple families. Voltage class, resource Jaccard,
+scarcity, heavy haul, continuous spatial values, and temporal percentages do not
+affect scoring or ranking. Resource tags remain descriptive canonical metadata.
+
+Ties resolve by raw score descending, closest-point distance ascending, actual
+timeline overlap strength, then stable pair id. Explanations identify estimated
+construction windows whenever an earned point depends on schedule compatibility.
 
 The LLM never produces these numbers. Gemini (Tier 5) may only extract fields from documents (validated by the schema) and phrase explanations using numbers from the engine.
 
 ## Database
 
-Postgres + PostGIS on Tiger Data (MLH prize, and Sperry's stack). `db/schema.sql` mirrors the contract and has a `candidate_overlaps()` function using `ST_DWithin` on real geometries and `daterange` overlap. Until `DATABASE_URL` is set, the app reads the JSON files, so nothing is blocked on the DB.
-
-SQL callers must pass all three thresholds explicitly. The application supplies
-them from the shared config (or user overrides), so SQL does not duplicate numeric
-defaults. Reapplying `db/schema.sql` transactionally replaces only this function to
-remove its old parameter defaults; it does not reload project data. Existing direct
-SQL integrations must pass all three arguments and retain any custom function
-grants when deploying this schema change.
+Postgres + PostGIS on Tiger Data (MLH prize, and Sperry's stack). `db/schema.sql`
+mirrors the contract and has `candidate_overlaps(max_km)` using `ST_DWithin` on real
+geometries, limited to the same four transmission/substation types before TypeScript scoring. The application supplies
+the exact 40 km value from the shared config, so SQL does not duplicate a default.
+Reapplying the schema transactionally replaces only the function and does not reload
+project data. Existing direct SQL clients must migrate from the former three-argument
+signature and retain custom function grants during deployment.
