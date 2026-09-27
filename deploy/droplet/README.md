@@ -1,6 +1,10 @@
 # Droplet deploy
 
-The public site runs on a DigitalOcean droplet (`gridsync-web`, 134.122.9.112) at
+> **Retired.** The public site now runs on DigitalOcean App Platform at
+> https://beforewebuildlets.compare and deploys on every push to `main`. The droplet
+> below no longer exists; this script is kept for reference.
+
+The site used to run on a DigitalOcean droplet (`gridsync-web`, 134.122.9.112) at
 https://134-122-9-112.sslip.io, behind Caddy (automatic HTTPS).
 
 **Auto-deploy:** a systemd timer runs `/opt/gridsync/deploy.sh` every 2 minutes. When
