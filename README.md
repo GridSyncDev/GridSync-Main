@@ -2,6 +2,8 @@
 
 **Compare utilities' public construction plans and flag where their work overlaps**: physically close, scheduled around the same time, and drawing on the same crews, equipment and materials. Built at ShellHacks 2026 for the Sperry Tech challenge.
 
+**Live:** https://gridsync-qp6kd.ondigitalocean.app
+
 FERC Order 1920 (2024) requires neighboring transmission planning regions to share plans and look for more efficient joint solutions, because utilities have historically planned in isolation. GridSync turns separately published plans into one map, one timeline and a ranked list of coordination opportunities, each traceable to its source document.
 
 ## Run locally
