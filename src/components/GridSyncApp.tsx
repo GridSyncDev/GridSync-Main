@@ -6,6 +6,7 @@ import type { Dataset, Project } from "@/lib/domain/schema";
 import { compare, findOverlaps, windowOf, type Overlap, type OverlapParams } from "@/lib/engine/overlap";
 import { addMonths, toIndex } from "@/lib/engine/time";
 import { KIND } from "@/lib/ui/format";
+import { DATA_URL, INGEST_URL } from "@/lib/ui/repo";
 import type { FlyTarget } from "./MapView";
 import OverlapDetail from "./OverlapDetail";
 import Timeline from "./Timeline";
@@ -260,7 +261,15 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
           </div>
           <div className="border-t border-line px-3 py-2 text-[10px] leading-snug text-muted">
             Data: SERTP 2026 Preliminary Expansion Plan · FPL 2026 Ten-Year Site Plan · FDEP siting · EIA-860M (Jul 2026) · utility
-            filings · substation locations © OpenStreetMap
+            filings · substation locations © OpenStreetMap ·{" "}
+            <a href={DATA_URL} target="_blank" rel="noreferrer" className="text-sky-300 hover:underline">
+              normalized data
+            </a>{" "}
+            &{" "}
+            <a href={INGEST_URL} target="_blank" rel="noreferrer" className="text-sky-300 hover:underline">
+              parsers
+            </a>{" "}
+            on GitHub
           </div>
         </aside>
 

@@ -4,6 +4,7 @@ import { resourceLabels, scarceResources } from "@/lib/domain/resources";
 import type { Project, Utility } from "@/lib/domain/schema";
 import { weights, windowOf, type Overlap } from "@/lib/engine/overlap";
 import { KIND, fmtMonth, statusLabel, typeLabel } from "@/lib/ui/format";
+import { repoSourceFor } from "@/lib/ui/repo";
 import Brief from "./Brief";
 
 interface Props {
@@ -224,11 +225,31 @@ export default function OverlapDetail({ overlap, baseline, a, b, utilities, shif
                     </li>
                   ))}
                 </ul>
+                <RepoLinks projectId={p.id} />
               </div>
             ))}
           </div>
         </section>
       </div>
+    </div>
+  );
+}
+
+function RepoLinks({ projectId }: { projectId: string }) {
+  const r = repoSourceFor(projectId);
+  return (
+    <div className="mt-1.5 flex flex-wrap gap-x-3 font-mono text-[10px] text-muted">
+      <span>GitHub:</span>
+      <a href={r.record} target="_blank" rel="noreferrer" className="text-sky-300 hover:underline">
+        normalized record ↗
+      </a>
+      {r.parser ? (
+        <a href={r.parser} target="_blank" rel="noreferrer" className="text-sky-300 hover:underline">
+          {r.label} ↗
+        </a>
+      ) : (
+        <span>{r.label}</span>
+      )}
     </div>
   );
 }
