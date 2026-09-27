@@ -35,7 +35,7 @@ type PresetKey = keyof typeof PRESETS;
 
 const pairId = (a: string, b: string) => [a, b].sort().join("__");
 
-export default function GridSyncApp({ dataset }: { dataset: Dataset }) {
+export default function GridSyncApp({ dataset, source }: { dataset: Dataset; source: "postgres" | "json" }) {
   const { projects, utilities: utilityList } = dataset;
   const utilities = useMemo(() => Object.fromEntries(utilityList.map((u) => [u.id, u])), [utilityList]);
   const parents = useMemo(() => Object.fromEntries(utilityList.map((u) => [u.id, u.parent])), [utilityList]);
@@ -165,7 +165,15 @@ export default function GridSyncApp({ dataset }: { dataset: Dataset }) {
           <Logo />
           <div>
             <div className="text-[15px] font-semibold tracking-tight">GridSync</div>
-            <div className="-mt-0.5 text-[10px] text-muted">Inter-utility construction coordination</div>
+            <div className="-mt-0.5 flex items-center gap-1.5 text-[10px] text-muted">
+              Inter-utility construction coordination
+              <span
+                className={`rounded px-1 ${source === "postgres" ? "bg-share/15 text-share" : "bg-white/10"}`}
+                title={source === "postgres" ? "Projects served from Postgres + PostGIS on Tiger Data" : "Projects served from local JSON files"}
+              >
+                {source === "postgres" ? "● Tiger Data · PostGIS" : "local data"}
+              </span>
+            </div>
           </div>
         </div>
         <div className="flex gap-1 rounded-lg border border-line bg-white/[0.03] p-1">

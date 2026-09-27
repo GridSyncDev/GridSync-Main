@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS utilities (
   name   text NOT NULL,
   kind   text NOT NULL,
   states text[] NOT NULL,
-  color  text NOT NULL
+  color  text NOT NULL,
+  parent text            -- holding company (sister utilities aren't flagged)
 );
 
 CREATE TABLE IF NOT EXISTS projects (

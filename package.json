@@ -9,7 +9,9 @@
     "lint": "eslint",
     "test": "node --import tsx --test \"src/**/*.test.ts\"",
     "typecheck": "next typegen && tsc --noEmit",
-    "ingest:eia": "python3 ingest/eia860m.py"
+    "ingest:eia": "python3 ingest/eia860m.py",
+    "db:sql": "tsx db/load.ts --sql",
+    "db:load": "tsx --env-file=.env.local db/load.ts"
   },
   "dependencies": {
     "@ai-sdk/elevenlabs": "^3.0.50",

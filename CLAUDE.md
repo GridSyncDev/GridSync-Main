@@ -9,4 +9,4 @@
 - Every project needs a source URL. Don't invent coordinates or dates; mark approximations with `locationPrecision`/`construction.precision`.
 - Work on feature branches and open PRs to `main` in GridSyncDev/GridSync-Main.
 - Before pushing: `npm test && npm run typecheck && npm run lint && npm run build`.
-- Stack: Next.js 16 App Router, Tailwind 4, zod 4, react-leaflet; Python/pandas for ingestion; Postgres + PostGIS (Tiger Data) planned.
+- Stack: Next.js 16 App Router, Tailwind 4, zod 4, deck.gl + MapLibre; Python/pandas/pypdf for ingestion; Postgres + PostGIS on Tiger Data (service o8z1mn3qkd, DEV).

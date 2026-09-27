@@ -1,7 +1,10 @@
 import GridSyncApp from "@/components/GridSyncApp";
-import { loadDataset } from "@/lib/data";
+import { loadDatasetWithSource } from "@/lib/data";
+
+// Read the database at request time, not at build time.
+export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const dataset = await loadDataset();
-  return <GridSyncApp dataset={dataset} />;
+  const { dataset, source } = await loadDatasetWithSource();
+  return <GridSyncApp dataset={dataset} source={source} />;
 }

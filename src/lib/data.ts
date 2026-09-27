@@ -2,13 +2,32 @@ import { readFile, readdir } from "node:fs/promises";
 import path from "node:path";
 import { datasetSchema, type Dataset } from "./domain/schema";
 
-// Loads every data/projects/*.json file and validates it against the contract.
-// A bad file fails loudly with the zod error instead of silently rendering nothing.
-// TODO(db): read from Postgres/PostGIS when DATABASE_URL is set (db/schema.sql).
+// With DATABASE_URL set, projects come from Postgres + PostGIS (Tiger Data, loaded by
+// `npm run db:load`). Otherwise, or if the database is unreachable, from data/projects/*.json.
 
 const DATA_DIR = path.join(process.cwd(), "data", "projects");
 
+export type DataSource = "postgres" | "json";
+
 export async function loadDataset(): Promise<Dataset> {
+  return (await loadDatasetWithSource()).dataset;
+}
+
+export async function loadDatasetWithSource(): Promise<{ dataset: Dataset; source: DataSource }> {
+  if (process.env.DATABASE_URL) {
+    try {
+      const { loadDatasetFromDb } = await import("./db");
+      return { dataset: await loadDatasetFromDb(), source: "postgres" };
+    } catch (err) {
+      console.warn("database unavailable, falling back to JSON:", err instanceof Error ? err.message : err);
+    }
+  }
+  return { dataset: await loadJsonDataset(), source: "json" };
+}
+
+// Every data/projects/*.json file, validated against the contract. A bad file fails loudly
+// with the zod error instead of silently rendering nothing.
+export async function loadJsonDataset(): Promise<Dataset> {
   const files = (await readdir(DATA_DIR)).filter((f) => f.endsWith(".json")).sort();
   const merged: Dataset = { utilities: [], projects: [] };
   for (const f of files) {
