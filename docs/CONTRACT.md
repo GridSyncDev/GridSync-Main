@@ -70,13 +70,14 @@ Run `npm test` after adding data. The loader validates every file.
 ### `GET /api/overlaps`
 Query params (all optional). `src/lib/engine/config.ts` is the authoritative source
 for startup defaults in the engine, frontend, and `/api/overlaps`, `/api/candidates`,
-and `/api/brief`. These preserve the existing frontend defaults; explicit overrides still apply.
+and `/api/brief`. These are EE-reviewed **GridSync v1 planning heuristics**, not
+universal industry constants; explicit user overrides still apply.
 
 | param | default | meaning |
 |---|---|---|
 | `maxMiles` | 25 | pairs within this distance are flagged `spatial` |
-| `maxGapMonths` | 6 | windows this close (or overlapping) are flagged `temporal` |
-| `regionMiles` | 75 | time-only flags must still be within this radius |
+| `maxGapMonths` | 0 | overlapping or immediately adjacent construction months qualify for `temporal` |
+| `regionMiles` | 25 | temporal flags use the same radius; no wider regional discovery at v1 defaults |
 | `utilities` | all | comma-separated utility ids to compare |
 | `shift` | none | what-if: `shift=<projectId>:<months>` (repeatable, negative = earlier) |
 
@@ -96,12 +97,44 @@ and `/api/brief`. These preserve the existing frontend defaults; explicit overri
 }
 ```
 
+## V1 candidate and geometry semantics
+
+At the v1 defaults, a pair must be at most 25 miles apart by the shortest distance
+between its stored project geometries. A pair farther than 25 miles is excluded
+even if its schedules overlap or are immediately adjacent. Same-utility and
+affiliate rules are unchanged. The existing spatial-or-temporal candidate rule
+is retained: nearby projects can still be spatial-only candidates even when their
+schedules are separated. The zero-month gap controls the temporal flag; it does
+not add a new requirement that every spatial candidate must overlap in time.
+
+`gapMonths()` counts whole months strictly between inclusive construction windows.
+For example, a February end followed by a March start has gap 0 and qualifies;
+a February end followed by an April start has gap 1 and does not receive a temporal
+flag with the v1 defaults.
+
+Verified in `src/lib/engine/geo.ts`: `distanceMiles()` uses closest-point distance
+between Points/LineStrings, **not center-to-center distance**. Point-to-Point uses
+haversine distance. When a LineString is involved, all vertices are projected to
+a local plane in miles; the function checks every segment pair for intersections
+and takes the minimum endpoint-to-segment distance, including segment interiors.
+Crossing or touching lines have distance 0. This is a local planar approximation
+for line distances, not an exact geodesic line-distance calculation. It measures
+the supplied geometry, whose real-world precision remains governed by
+`locationPrecision`. Map anchors and camera centers are display helpers and do
+not drive candidate discovery. PostGIS uses `ST_DWithin`/`ST_Distance` on the stored
+geographies, likewise not centroids.
+
+The 1/5/25-mile scoring tiers, project-family crew/equipment logic, removal of
+voltage-class scoring or heavy-haul relevance, and ROW explanations under about
+1 mile are deferred to a separate scoring-model PR. Task A changes defaults and
+wording only; score values can change with the new inputs, but the formula is unchanged.
+
 ## Scoring (explainable, no ML)
 
 `total = 0.35·spatial + 0.30·temporal + 0.25·resource + 0.10·asset`
 
 - **spatial**: 1 at 0 mi → 0 at `regionMiles`
-- **temporal**: share of the shorter window that overlaps; if the windows don't overlap, it decays from 0.5 to 0 at 2×`maxGapMonths`
+- **temporal**: share of the shorter window that overlaps; otherwise, the existing formula is `0.5 × clamp01(1 - gap / (2 × max(1, maxGapMonths)))`. With a zero-month default gap, adjacent windows still score 0.5; the formula's minimum decay denominator remains unchanged.
 - **resource**: Jaccard overlap of resource tags
 - **asset**: same voltage class 1, different 0.3, unknown 0.5
 - **kind**: `collision_risk` when the windows overlap and both need a scarce resource (large power transformers, HV breakers, EHV crews, heavy haul), otherwise `sharing_opportunity`. The internal key remains compatible; user-facing text says **potential resource contention**. Shared resource types suggest potential competition and coordination opportunities, not confirmed shortages or delays.

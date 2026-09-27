@@ -7,7 +7,7 @@ import { factSheet, template } from "../brief";
 import { loadJsonDataset } from "../data";
 import { KIND } from "../ui/format";
 import { overlapDefaults } from "./config";
-import { compare, defaultParams, findOverlaps } from "./overlap";
+import { compare, defaultParams, findOverlaps, type OverlapParams } from "./overlap";
 
 test("overlap API defaults and explicit overrides match the shared engine on real data", async () => {
   const previousUrl = process.env.DATABASE_URL;
@@ -18,12 +18,13 @@ test("overlap API defaults and explicit overrides match the shared engine on rea
     const projects = dataset.projects.filter((p) => utilityIds.includes(p.utility));
     assert.ok(projects.length > 1);
     assert.equal(defaultParams, overlapDefaults);
+    assert.deepEqual(overlapDefaults, { maxMiles: 25, maxGapMonths: 0, regionMiles: 25 });
     for (const overrides of [null, { maxMiles: 50, maxGapMonths: 0, regionMiles: 250 }]) {
       const query = new URLSearchParams({ utilities: utilityIds.join(",") });
       if (overrides) for (const [key, value] of Object.entries(overrides)) query.set(key, String(value));
       const response = await overlapsGET(new Request("http://localhost/api/overlaps?" + query));
       const body = await response.json();
-      const expected = { ...(overrides ?? overlapDefaults), shifts: {} };
+      const expected: OverlapParams = { ...(overrides ?? overlapDefaults), shifts: {} };
       assert.equal(response.status, 200);
       assert.deepEqual(body.params, expected);
       assert.deepEqual(body.overlaps, findOverlaps(projects, expected));
