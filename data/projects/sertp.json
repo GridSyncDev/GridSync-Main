@@ -3165,8 +3165,8 @@
         "type": "LineString",
         "coordinates": [
           [
-            -81.2094724,
-            32.2487012
+            -81.209472,
+            32.248701
           ],
           [
             -81.1459835,
@@ -4149,8 +4149,8 @@
             32.2487012
           ],
           [
-            -81.1751124,
-            32.3521162
+            -81.182105,
+            32.352116
           ]
         ]
       },
@@ -4162,7 +4162,7 @@
       },
       "inService": "2028-05",
       "status": "planned",
-      "description": "Rebuild the Goshen (Savannah) - Georgia Pacific (Rincon) section, approximately 6.7 miles, of the Goshen (Sav) - McIntosh 115 kV line using 200\u00b0C 1351 ACSS conductor. Need: The Goshen (Sav) - McIntosh 115 kV line overloads under contingency.",
+      "description": "Rebuild the Goshen (Savannah) - Georgia Pacific (Rincon) section, approximately 6.7 miles, of the Goshen (Sav) - McIntosh 115 kV line using 200\u00b0C 1351 ACSS conductor. Need: The Goshen (Sav) - McIntosh 115 kV line overloads under contingency. The sponsor starter workbook supplies the endpoint coordinates used by this approximate straight-line geometry and lists a June 2027 in-service target. The newer public 2026 SERTP Non-CEII plan lists a 2028 in-service year and the narrower 6.7-mile section scope; the canonical May 2028 target and June 2027-May 2028 construction window follow that public plan convention, with the construction window marked estimated rather than utility-published.",
       "state": "GA",
       "sources": [
         {
@@ -4176,6 +4176,13 @@
           "url": "https://www.openstreetmap.org/",
           "title": "Substation locations: Goshen Substation, McIntosh Substation",
           "publisher": "OpenStreetMap contributors (ODbL)"
+        },
+        {
+          "url": "https://github.com/GridSyncDev/GridSync-Main/blob/main/docs/SPONSOR_STARTER_REFERENCE.md",
+          "title": "Sperry starter workbook reference",
+          "publisher": "Sperry Tech",
+          "retrieved": "2026-09-27",
+          "quote": "GPC_3: Goshen 32.248701, -81.209472; McIntosh 32.352116, -81.182105; sponsor in-service target 2027-06-01."
         }
       ]
     },
