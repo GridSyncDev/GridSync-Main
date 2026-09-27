@@ -6,6 +6,7 @@ import type { Overlap } from "@/lib/engine/overlap";
 import {
   COST_CAVEAT,
   IMPACT_CAVEAT,
+  IMPACT_SCENARIO_ASSUMPTION,
   USER_ASSUMPTION_LABEL,
   costAvoidedRange,
   impactAssumptionSource,
@@ -48,18 +49,18 @@ export default function ImpactScenario({ overlap, a, b }: Props) {
   return (
     <section className="rounded-lg border border-share/40 bg-share/[0.07] p-3" data-testid="impact-scenario">
       <div className="text-[11px] font-semibold uppercase tracking-wider text-share">Illustrative impact scenario</div>
-      <div className="mt-1 text-xs text-muted">Potential duplicated temporary staging footprint avoided</div>
+      <div className="mt-1 text-xs text-muted">Potential duplicate local staging footprint avoided</div>
       <div className="mt-0.5 font-mono text-2xl font-semibold text-text">
         {impactScenario.potentialDuplicatedFootprintAvoidedAcres.min}–{impactScenario.potentialDuplicatedFootprintAvoidedAcres.max} acres
       </div>
 
       <div className="mt-3 grid grid-cols-2 gap-2 text-xs">
         <div className="rounded-md border border-line bg-black/20 p-2">
-          <div className="text-muted">Separate yards</div>
+          <div className="text-muted">Separate local yards (1 per project)</div>
           <div className="mt-0.5 font-mono">{impactScenario.separateYardsAcres.min}–{impactScenario.separateYardsAcres.max} acres</div>
         </div>
         <div className="rounded-md border border-line bg-black/20 p-2">
-          <div className="text-muted">Shared-yard scenario</div>
+          <div className="text-muted">One shared local yard</div>
           <div className="mt-0.5 font-mono">{impactScenario.sharedYardAcres.min}–{impactScenario.sharedYardAcres.max} acres</div>
         </div>
       </div>
@@ -108,6 +109,7 @@ export default function ImpactScenario({ overlap, a, b }: Props) {
       <details className="mt-3 border-t border-line pt-2 text-xs">
         <summary className="cursor-pointer font-medium text-sky-300">Assumptions &amp; sources</summary>
         <div className="mt-2 space-y-2 leading-relaxed text-muted">
+          <p>{IMPACT_SCENARIO_ASSUMPTION}</p>
           <p>{IMPACT_CAVEAT}</p>
           <p>{COST_CAVEAT}</p>
           <div>
@@ -134,5 +136,4 @@ export default function ImpactScenario({ overlap, a, b }: Props) {
     </section>
   );
 }
-
 

@@ -8,6 +8,7 @@ import { compare } from "./engine/overlap";
 import {
   COST_CAVEAT,
   IMPACT_CAVEAT,
+  IMPACT_SCENARIO_ASSUMPTION,
   USER_ASSUMPTION_LABEL,
   WINDER_IMPACT_PROJECT_IDS,
   costAvoidedRange,
@@ -90,9 +91,15 @@ test("live Winder facts are copied from Overlap rather than impact constants", a
 test("impact copy labels dollars as an assumption and avoids guaranteed or Winder-specific claims", async () => {
   const component = await readFile(path.join(process.cwd(), "src", "components", "ImpactScenario.tsx"), "utf8");
   const impactModule = await readFile(path.join(process.cwd(), "src", "lib", "impact.ts"), "utf8");
-  const copy = `${USER_ASSUMPTION_LABEL} ${IMPACT_CAVEAT} ${COST_CAVEAT} ${component} ${impactModule}`;
+  const copy = `${USER_ASSUMPTION_LABEL} ${IMPACT_SCENARIO_ASSUMPTION} ${IMPACT_CAVEAT} ${COST_CAVEAT} ${component} ${impactModule}`;
 
   assert.match(USER_ASSUMPTION_LABEL, /user-assumption scenario/i);
+  assert.match(IMPACT_SCENARIO_ASSUMPTION, /each project would otherwise establish one comparable local 1–3 acre staging yard/i);
+  assert.match(IMPACT_SCENARIO_ASSUMPTION, /one comparable yard can serve both projects without requiring material additional acreage/i);
+  assert.match(component, /IMPACT_SCENARIO_ASSUMPTION/);
+  assert.match(component, /Potential duplicate local staging footprint avoided/);
+  assert.match(component, /Separate local yards \(1 per project\)/);
+  assert.match(component, /One shared local yard/);
   assert.match(IMPACT_CAVEAT, /generic DOE transmission-construction guidance/i);
   assert.match(IMPACT_CAVEAT, /not a published requirement for either Winder project/i);
   assert.match(COST_CAVEAT, /planner-entered all-in temporary staging cost per acre/i);
@@ -118,5 +125,4 @@ test("the sponsor-aligned Savannah hero remains unchanged at 2/4 and normalized 
   assert.equal(overlap.scores.normalized, 50);
   assert.equal(impactScenarioForPair(aId, bId), null);
 });
-
 

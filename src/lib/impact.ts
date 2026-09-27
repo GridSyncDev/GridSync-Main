@@ -24,6 +24,9 @@ export const impactScenario = {
 
 export const USER_ASSUMPTION_LABEL = "User-assumption scenario";
 
+export const IMPACT_SCENARIO_ASSUMPTION =
+  "Scenario assumption: each project would otherwise establish one comparable local 1–3 acre staging yard. The shared-yard case assumes one comparable yard can serve both projects without requiring material additional acreage.";
+
 export const IMPACT_CAVEAT =
   "Illustrative planning scenario only. The 1–3 acre staging range is generic DOE transmission-construction guidance, not a published requirement for either Winder project. Actual sharing feasibility and site needs depend on final engineering, access, land ownership, equipment, permitting, construction sequencing, and agreements between the utilities.";
 
@@ -77,5 +80,4 @@ export function impactFactsFromOverlap(overlap: Overlap) {
       .map(([key]) => coordinationMechanismLabels[key]),
   };
 }
-
 
