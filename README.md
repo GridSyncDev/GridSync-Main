@@ -2,7 +2,7 @@
 
 **Compare utilities' public construction plans and identify coordination opportunities** using closest-point geography, schedule relationships, and a deterministic four-point rubric. Built at ShellHacks 2026 for the Sperry Tech challenge.
 
-**Live:** https://gridsync-qp6kd.ondigitalocean.app
+**Live:** https://beforewebuildlets.compare
 
 FERC Order 1920 (2024) requires neighboring transmission planning regions to share plans and look for more efficient joint solutions, because utilities have historically planned in isolation. GridSync turns separately published plans into one map, one timeline and a ranked list of coordination opportunities, each traceable to its source document.
 

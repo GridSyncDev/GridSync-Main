@@ -13,10 +13,15 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const description =
+  "Compares utilities' public construction plans and flags where their work overlaps in space, time and resources.";
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://beforewebuildlets.compare"),
   title: "GridSync · Utility construction coordination",
-  description:
-    "Compares utilities' public construction plans and flags where their work overlaps in space, time and resources.",
+  description,
+  alternates: { canonical: "/" },
+  openGraph: { url: "/", siteName: "GridSync", title: "GridSync", description },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
