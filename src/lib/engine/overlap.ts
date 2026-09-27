@@ -1,4 +1,9 @@
-import { projectFamiliesFor, sharedProjectFamilies, type ProjectFamily } from "../domain/projectFamilies";
+import {
+  isCoordinationEligibleProject,
+  projectFamiliesFor,
+  sharedProjectFamilies,
+  type ProjectFamily,
+} from "../domain/projectFamilies";
 import { resourcesFor } from "../domain/resources";
 import type { Project } from "../domain/schema";
 import {
@@ -97,7 +102,7 @@ export function compare(a: Project, b: Project, params: OverlapParams = defaultP
   if (a.utility === b.utility) return null;
   const parent = params.parents?.[a.utility];
   if (!params.includeAffiliates && parent && parent === params.parents?.[b.utility]) return null;
-  if (a.type.startsWith("generation_") || b.type.startsWith("generation_")) return null;
+  if (!isCoordinationEligibleProject(a) || !isCoordinationEligibleProject(b)) return null;
 
   // Keep the established closest-point engine as the sole source of distance.
   const exactDistanceMiles = distanceMiles(a.geometry, b.geometry);

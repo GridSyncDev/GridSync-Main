@@ -68,6 +68,30 @@ test("generation versus transmission is excluded", () => {
   assert.equal(compare(base({ id: "a", type: "generation_gas" }), other({ type: "transmission_line_new" })), null);
 });
 
+test("distribution versus transmission is excluded", () => {
+  assert.equal(compare(base({ id: "a", type: "distribution" }), other({ type: "transmission_line_new" })), null);
+});
+
+test("other versus substation is excluded", () => {
+  assert.equal(compare(base({ id: "a", type: "other" }), other({ type: "substation_new" })), null);
+});
+
+test("distribution versus other is excluded", () => {
+  assert.equal(compare(base({ id: "a", type: "distribution" }), other({ type: "other" })), null);
+});
+
+test("all four transmission/substation project types remain eligible", () => {
+  const supported: ProjectType[] = [
+    "transmission_line_new",
+    "transmission_line_upgrade",
+    "substation_new",
+    "substation_upgrade",
+  ];
+  for (const type of supported) {
+    assert.ok(compare(base({ id: `a-${type}`, type }), other({ type: "transmission_line_new" })), type);
+  }
+});
+
 test("touching/crossing plus actual overlap earns the outage point", () => {
   const a = base({ id: "a", type: "transmission_line_new", geometry: { type: "LineString", coordinates: [[-1, 0], [1, 0]] } });
   const b = other({ type: "transmission_line_upgrade", geometry: { type: "LineString", coordinates: [[0, -1], [0, 1]] }, construction: schedules.overlap });
@@ -135,12 +159,6 @@ test("under 40 km plus compatible timing and shared transmission family earns cr
   )!;
   assert.deepEqual(result.families.shared, ["transmission"]);
   assert.equal(result.scores.breakdown.crewEquipment.earned, true);
-});
-
-test("compatible timing without a shared family does not earn crews/equipment", () => {
-  const result = compare(base({ id: "a", type: "other" }), other({ type: "distribution", construction: schedules.overlap }))!;
-  assert.deepEqual(result.families.shared, []);
-  assert.equal(result.scores.breakdown.crewEquipment.earned, false);
 });
 
 test("transmission and substation families do not earn the crew point", () => {

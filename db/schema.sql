@@ -45,8 +45,8 @@ CREATE TABLE IF NOT EXISTS sources (
   page       int
 );
 
--- Candidate overlaps straight from the database: eligible cross-utility,
--- non-generation pairs inside the frozen geographic gate. ST_DWithin evaluates
+-- Candidate overlaps straight from the database: eligible cross-utility
+-- transmission/substation pairs inside the frozen geographic gate. ST_DWithin evaluates
 -- the stored geometries (lines included), not centers or centroids. Scoring and
 -- schedule compatibility remain in src/lib/engine/overlap.ts.
 -- SQL owns no threshold default; the application passes the canonical kilometer value.
@@ -61,8 +61,8 @@ RETURNS TABLE (a text, b text, distance_miles real, overlap_days int) LANGUAGE s
          GREATEST(0, upper(p.construction * q.construction) - lower(p.construction * q.construction))::int
   FROM projects p
   JOIN projects q ON p.id < q.id AND p.utility_id <> q.utility_id
-  WHERE p.type NOT LIKE 'generation\_%' ESCAPE '\'
-    AND q.type NOT LIKE 'generation\_%' ESCAPE '\'
+  WHERE p.type IN ('transmission_line_new', 'transmission_line_upgrade', 'substation_new', 'substation_upgrade')
+    AND q.type IN ('transmission_line_new', 'transmission_line_upgrade', 'substation_new', 'substation_upgrade')
     AND ST_DWithin(p.geom, q.geom, max_km * 1000)
 $$;
 COMMIT;

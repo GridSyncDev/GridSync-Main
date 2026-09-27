@@ -108,12 +108,14 @@ ignored; callers may still scope utilities or shift schedules for a what-if anal
 
 ## V1 candidate and geometry semantics
 
-Generation projects remain in the dataset and map, but if either project type starts
-with `generation_`, the engine returns no scored comparison. Other cross-utility
-pairs must be within **40 km inclusive** by the shortest distance between their stored
-project geometries. A pair above 40 km is excluded regardless of schedule. Same-utility
-and affiliate rules are unchanged. A geographically eligible pair may receive zero
-points; schedule compatibility affects only the points whose rules require it.
+Only `transmission_line_new`, `transmission_line_upgrade`, `substation_new`, and
+`substation_upgrade` projects are eligible for scored comparisons. Every other
+canonical type—including generation, distribution, and other—remains in the dataset
+and map but produces no scored pair. Eligible cross-utility pairs must be within
+**40 km inclusive** by the shortest distance between their stored project geometries.
+A pair above 40 km is excluded regardless of schedule. Same-utility and affiliate
+rules are unchanged. A geographically eligible pair may receive zero points;
+schedule compatibility affects only the points whose rules require it.
 
 `gapMonths()` counts whole months strictly between inclusive construction windows.
 For example, a February end followed by a March start has gap 0 and is immediately
@@ -163,7 +165,7 @@ The LLM never produces these numbers. Gemini (Tier 5) may only extract fields fr
 
 Postgres + PostGIS on Tiger Data (MLH prize, and Sperry's stack). `db/schema.sql`
 mirrors the contract and has `candidate_overlaps(max_km)` using `ST_DWithin` on real
-geometries, excluding generation before TypeScript scoring. The application supplies
+geometries, limited to the same four transmission/substation types before TypeScript scoring. The application supplies
 the exact 40 km value from the shared config, so SQL does not duplicate a default.
 Reapplying the schema transactionally replaces only the function and does not reload
 project data. Existing direct SQL clients must migrate from the former three-argument
