@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { Project, Utility } from "@/lib/domain/schema";
+import type { OverlapThresholds } from "@/lib/engine/config";
 import type { Overlap } from "@/lib/engine/overlap";
 
 interface Props {
@@ -10,7 +11,7 @@ interface Props {
   b: Project;
   utilities: Record<string, Utility>;
   shifts: Record<string, number>;
-  params: { maxMiles: number; maxGapMonths: number; regionMiles: number };
+  params: OverlapThresholds;
 }
 
 export default function Brief({ a, b, shifts, params }: Props) {

@@ -3,7 +3,7 @@ import { lowThinking, withModelFallback } from "./ai";
 import { resourceLabels } from "./domain/resources";
 import type { Project, Utility } from "./domain/schema";
 import { windowOf, type Overlap } from "./engine/overlap";
-import { fmtMonth, typeLabel } from "./ui/format";
+import { KIND, fmtMonth, typeLabel } from "./ui/format";
 
 // Coordination brief for a planner. Gemini only phrases the engine's facts; any number in its
 // text that isn't in the fact sheet gets the brief replaced by a deterministic template.
@@ -19,7 +19,8 @@ export function factSheet(o: Overlap, a: Project, b: Project, shifts: Record<str
     `Distance: ${o.distanceMiles} miles`,
     o.overlapMonths ? `Construction windows overlap: ${o.overlapMonths} months` : `Gap between construction windows: ${o.gapMonths} months`,
     `Coordination score: ${o.scores.total} out of 100 (spatial ${o.scores.spatial}, schedule ${o.scores.temporal}, resources ${o.scores.resource}, asset ${o.scores.asset})`,
-    `Classification: ${o.kind === "collision_risk" ? "resource collision risk" : "sharing opportunity"}`,
+    `Classification: ${KIND[o.kind].label}`,
+    "Shared resource types indicate potential competition or coordination opportunities; actual supplier capacity, shortages and project delays are not established.",
     `Crosses a state line: ${o.crossesStateLine ? "yes" : "no"}`,
     `Shared resource needs: ${o.sharedResources.map((r) => resourceLabels[r] ?? r).join("; ") || "none"}`,
     `Constrained (long-lead) shared resources: ${o.scarceShared.map((r) => resourceLabels[r] ?? r).join("; ") || "none"}`,
@@ -29,9 +30,9 @@ export function factSheet(o: Overlap, a: Project, b: Project, shifts: Record<str
 
 const instructions = `You write short coordination briefs for utility transmission planners. Two utilities published separate construction plans; an engine found an overlap. Write 3 sentences, plain prose, no lists or markdown:
 1) what overlaps (name both utilities and projects, where and when),
-2) the concrete coordination opportunity or risk given the shared resources,
+2) the potential resource contention or coordination opportunity suggested by the shared resource types,
 3) one practical next step (e.g. a joint scheduling call, shared mobilization, joint procurement of the constrained items).
-Rules: use only numbers and dates that appear in FACTS, written exactly as given. Do not invent costs, savings, or new numbers. Be specific and neutral: this is an opportunity to investigate, not proof of waste.`;
+Rules: use only numbers and dates that appear in FACTS, written exactly as given. Do not invent costs, savings, or new numbers. Use "potential resource contention", never "collision risk". Shared resource types do not establish a shortage or a delay. Describe possible competition and coordination opportunities to investigate; do not claim projects will be delayed or that coordination will prevent delays. Be specific and neutral: this is an opportunity to investigate, not proof of waste.`;
 
 function numbersIn(text: string): string[] {
   return text.replace(/(\d),(\d{3})/g, "$1$2").match(/\d+(?:\.\d+)?/g) ?? [];
@@ -72,9 +73,9 @@ export function template(o: Overlap, a: Project, b: Project, ua: Utility, ub: Ut
   const scarce = o.scarceShared.map((r) => (resourceLabels[r] ?? r).toLowerCase()).join(" and ");
   return [
     `${ua.name}'s ${a.name} (${fmtMonth(wa.start)} to ${fmtMonth(wa.end)}) and ${ub.name}'s ${b.name} (${fmtMonth(wb.start)} to ${fmtMonth(wb.end)}) are ${o.distanceMiles} miles apart, and ${when}.`,
-    shared ? `Both draw on ${shared}${scarce ? `, including constrained ${scarce}` : ""}.` : "They draw on different resources.",
+    shared ? `Their shared resource needs (${shared}${scarce ? `, including constrained ${scarce}` : ""}) suggest potential ${o.kind === "collision_risk" ? "resource contention" : "coordination opportunities"}, without establishing an actual shortage or delay.` : "They draw on different resources.",
     o.kind === "collision_risk"
-      ? `Next step: a joint scheduling call to stagger or jointly procure the constrained items before either utility locks its order.`
+      ? `Next step: a joint scheduling call to investigate resource availability and opportunities for staggered schedules or joint procurement.`
       : `Next step: a joint scheduling call to explore shared crew mobilization and equipment staging.`,
   ].join(" ");
 }

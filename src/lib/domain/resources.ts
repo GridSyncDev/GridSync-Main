@@ -38,7 +38,7 @@ const byType: Record<ProjectType, string[]> = {
 };
 
 // Resources with long lead times or thin labor pools: sharing them across overlapping
-// projects is where schedules collide (transformer lead times run 2–4 years).
+// projects may warrant investigating availability and coordination opportunities.
 export const scarceResources = new Set(["power_transformers", "hv_breakers", "ehv_line_crews", "heavy_haul"]);
 
 export function resourcesFor(p: Project): string[] {

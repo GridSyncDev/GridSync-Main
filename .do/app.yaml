@@ -5,8 +5,8 @@ region: nyc
 services:
   - name: web
     git:
-      repo_clone_url: https://github.com/PinedaMiguel/GridSync-Main.git
-      branch: feat/scaffold-contract
+      repo_clone_url: https://github.com/GridSyncDev/GridSync-Main.git
+      branch: main
     environment_slug: node-js
     build_command: npm run build
     run_command: npm start
