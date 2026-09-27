@@ -465,6 +465,42 @@
       ]
     },
     {
+      "id": "gp-mcintosh-purrysburg-230kv",
+      "utility": "georgia-power-co",
+      "name": "McIntosh-Purrysburg 230 kV reactors and rebuilds",
+      "type": "transmission_line_upgrade",
+      "voltageKv": 230,
+      "capacityMw": null,
+      "geometry": {
+        "type": "Point",
+        "coordinates": [
+          -81.175112,
+          32.352116
+        ]
+      },
+      "locationPrecision": "approximate",
+      "construction": {
+        "start": "2025-09",
+        "end": "2026-06",
+        "precision": "estimated"
+      },
+      "inService": "2026-06",
+      "status": "planned",
+      "description": "Install reactors on the McIntosh-Purrysburg 230 kV tie lines and rebuild the short Georgia Power sections at McIntosh. The sponsor challenge reference supplies the June 2026 target and the McIntosh coordinate, but does not resolve Purrysburg; this record therefore locates only the known McIntosh endpoint as an approximate Point and does not claim a complete route. The construction window is inferred and is not a published schedule.",
+      "county": "Effingham",
+      "state": "GA",
+      "sources": [
+        {
+          "url": "https://www.southeasternrtp.com/docs/general/2024/2024_Regional_Transmission_Plan_and_Input_Assumptions.pdf",
+          "title": "2024 Regional Transmission Plan and Input Assumptions",
+          "publisher": "Southeastern Regional Transmission Planning (SERTP)",
+          "retrieved": "2026-09-27",
+          "quote": "In-Service Year: 2026. Project Name: MCINTOSH - PURRYSBURG 230KV REACTORS. Description: Install reactors on the McIntosh - Purrysburg (Black and White) 230kV tie lines at McIntosh. Rebuild 0.1 miles (GPC portion) for both lines to (2) 200C 1351 ACSS conductor.",
+          "page": 77
+        }
+      ]
+    },
+    {
       "id": "gp-effingham-500kv-substation",
       "utility": "georgia-power-co",
       "name": "Effingham County 500 kV substation (new)",
@@ -500,9 +536,9 @@
       ]
     },
     {
-      "id": "desc-jasper-okatie-sherwood-230kv",
+      "id": "desc-jasper-okatie-230kv-2",
       "utility": "dominion-energy-south-carolina",
-      "name": "Jasper-Okatie-Sherwood 230 kV lines + Sherwood substation",
+      "name": "Jasper-Okatie 230 kV #2",
       "type": "transmission_line_new",
       "voltageKv": 230,
       "capacityMw": null,
@@ -510,32 +546,24 @@
         "type": "LineString",
         "coordinates": [
           [
-            -81.1242,
-            32.3607
+            -81.1246,
+            32.35912
           ],
           [
-            -81.0797,
-            32.2885
-          ],
-          [
-            -81.045,
-            32.299
-          ],
-          [
-            -80.927,
-            32.298
+            -81.032495,
+            32.333758
           ]
         ]
       },
       "locationPrecision": "approximate",
       "construction": {
         "start": "2025-01",
-        "end": "2027-06",
+        "end": "2025-12",
         "precision": "estimated"
       },
-      "inService": "2027-06",
+      "inService": "2025-12",
       "status": "under_construction",
-      "description": "Two new 230 kV lines: Jasper Generating Plant to Okatie, and Okatie to the new Sherwood substation, crossing Hwy 17, Main St in Hardeeville and Hwy 141. Tree clearing and construction began Q1 2025. Route sketched through the published road crossings.",
+      "description": "Construct the distinct Jasper-Okatie 230 kV #2 project. The sponsor challenge reference supplies the Jasper and Okatie endpoints and the December 2025 target. Geometry is a straight endpoint-to-endpoint approximation, not the surveyed transmission route. Dominion reports that transmission-line construction began in Q1 2025; the month-level construction window remains estimated.",
       "county": "Jasper",
       "state": "SC",
       "sources": [
@@ -545,13 +573,9 @@
           "publisher": "Dominion Energy",
           "retrieved": "2026-09-26",
           "quote": "Q1 2025: Tree clearing and construction of transmission lines and substation begin"
-        },
-        {
-          "url": "https://www.openstreetmap.org/",
-          "title": "Substation locations (OpenStreetMap)",
-          "publisher": "OpenStreetMap contributors (ODbL)"
         }
       ]
     }
   ]
 }
+
