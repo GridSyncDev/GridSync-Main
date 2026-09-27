@@ -1,6 +1,7 @@
 import { brief } from "@/lib/brief";
 import { loadDataset } from "@/lib/data";
-import { compare, defaultParams } from "@/lib/engine/overlap";
+import { overlapDefaults } from "@/lib/engine/config";
+import { compare } from "@/lib/engine/overlap";
 
 // POST { a, b, shifts?, maxMiles?, maxGapMonths?, regionMiles? } -> { text, source, score }
 // The overlap is recomputed here from the data, so the client can't feed the model made-up numbers.
@@ -17,9 +18,9 @@ export async function POST(req: Request) {
 
   const num = (v: unknown, d: number) => (Number.isFinite(Number(v)) ? Number(v) : d);
   const o = compare(pa, pb, {
-    maxMiles: num(body.maxMiles, defaultParams.maxMiles),
-    maxGapMonths: num(body.maxGapMonths, defaultParams.maxGapMonths),
-    regionMiles: num(body.regionMiles, defaultParams.regionMiles),
+    maxMiles: num(body.maxMiles, overlapDefaults.maxMiles),
+    maxGapMonths: num(body.maxGapMonths, overlapDefaults.maxGapMonths),
+    regionMiles: num(body.regionMiles, overlapDefaults.regionMiles),
     shifts,
     includeAffiliates: true,
   });

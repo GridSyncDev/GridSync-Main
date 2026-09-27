@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useMemo, useState } from "react";
 import type { Dataset, Project } from "@/lib/domain/schema";
+import { overlapDefaults } from "@/lib/engine/config";
 import { compare, findOverlaps, windowOf, type Overlap, type OverlapParams } from "@/lib/engine/overlap";
 import { addMonths, toIndex } from "@/lib/engine/time";
 import { KIND } from "@/lib/ui/format";
@@ -47,9 +48,9 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
     return c;
   }, [projects]);
 
-  const [maxMiles, setMaxMiles] = useState(25);
-  const [maxGapMonths, setMaxGapMonths] = useState(6);
-  const [regionMiles, setRegionMiles] = useState(75);
+  const [maxMiles, setMaxMiles] = useState(overlapDefaults.maxMiles);
+  const [maxGapMonths, setMaxGapMonths] = useState(overlapDefaults.maxGapMonths);
+  const [regionMiles, setRegionMiles] = useState(overlapDefaults.regionMiles);
   const [includeAffiliates, setIncludeAffiliates] = useState(false);
   const [onlyCrossState, setOnlyCrossState] = useState(false);
   const [onlyBoth, setOnlyBoth] = useState(false);
@@ -194,7 +195,7 @@ export default function GridSyncApp({ dataset, source }: { dataset: Dataset; sou
           <Stat n={stats.utilities} label="utilities" />
           <Stat n={stats.overlaps} label="flagged" />
           <Stat n={stats.both} label="near + concurrent" color="var(--share)" />
-          <Stat n={stats.collisions} label="collision risks" color="var(--collide)" />
+          <Stat n={stats.collisions} label={KIND.collision_risk.label} color="var(--collide)" />
           <Stat n={stats.interstate} label="cross-state" color="var(--interstate)" />
         </div>
       </header>
@@ -422,7 +423,7 @@ function OverlapCard({ o, a, b, colors, selected, onClick }: { o: Overlap; a: Pr
         <span>{o.distanceMiles} mi</span>
         <span>{o.overlapMonths ? `${o.overlapMonths} mo overlap` : `${o.gapMonths} mo apart`}</span>
         {o.crossesStateLine && <span className="text-interstate">{a.state}⇄{b.state}</span>}
-        {o.kind === "collision_risk" && <span className="text-collide">collision</span>}
+        {o.kind === "collision_risk" && <span className="text-collide">{KIND.collision_risk.label}</span>}
       </div>
     </button>
   );
@@ -435,7 +436,7 @@ function Legend() {
         <span className="inline-block h-0.5 w-5 rounded" style={{ background: KIND.sharing_opportunity.color }} /> sharing opportunity
       </div>
       <div className="flex items-center gap-2">
-        <span className="inline-block h-0.5 w-5 rounded" style={{ background: KIND.collision_risk.color }} /> resource collision risk
+        <span className="inline-block h-0.5 w-5 rounded" style={{ background: KIND.collision_risk.color }} /> {KIND.collision_risk.label}
       </div>
       <div className="mt-1 flex items-center gap-2 text-muted">
         <span className="inline-block w-5 border-t-2 border-dashed border-slate-400" /> approximate route · ○ county-level site
@@ -454,8 +455,8 @@ function Intro({ onPreset, onClose }: { onPreset: (k: PresetKey) => void; onClos
       <h1 className="mt-1 text-xl font-semibold leading-snug">Utilities plan their construction in isolation.</h1>
       <p className="mt-2 text-sm leading-relaxed text-muted">
         GridSync reads their public plans (regional transmission plans, ten-year site plans, siting filings), puts every project on one
-        map and timeline, and flags where neighbors will be building close together or at the same time, so they can share crews,
-        equipment and long-lead materials instead of competing for them.
+        map and timeline, and flags where neighbors plan to build close together or at the same time. These overlaps suggest
+        opportunities to explore shared crews, equipment and long-lead materials, or investigate potential competition for them.
       </p>
       <div className="mt-4 grid grid-cols-3 gap-2">
         {(Object.keys(PRESETS) as PresetKey[]).map((k) => (

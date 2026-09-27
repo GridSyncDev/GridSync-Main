@@ -2,6 +2,7 @@
 
 import { resourceLabels, scarceResources } from "@/lib/domain/resources";
 import type { Project, Utility } from "@/lib/domain/schema";
+import type { OverlapThresholds } from "@/lib/engine/config";
 import { weights, windowOf, type Overlap } from "@/lib/engine/overlap";
 import { KIND, fmtMonth, statusLabel, typeLabel } from "@/lib/ui/format";
 import { repoSourceFor } from "@/lib/ui/repo";
@@ -14,7 +15,7 @@ interface Props {
   b: Project;
   utilities: Record<string, Utility>;
   shifts: Record<string, number>;
-  params: { maxMiles: number; maxGapMonths: number; regionMiles: number };
+  params: OverlapThresholds;
   onShift: (projectId: string, months: number) => void;
   onClose: () => void;
 }
@@ -153,8 +154,8 @@ export default function OverlapDetail({ overlap, baseline, a, b, utilities, shif
           </div>
           {o.scarceShared.length > 0 && (
             <p className="mt-2 text-xs text-muted">
-              ⚠ = long-lead or thin-labor-pool resources. Overlapping demand here can delay both projects; joint procurement or
-              staggered mobilization can avoid it.
+              ⚠ = long-lead or thin-labor-pool resource types. Shared needs suggest potential competition, not a confirmed shortage
+              or delay. Joint procurement or staggered mobilization may offer coordination opportunities worth investigating.
             </p>
           )}
         </section>

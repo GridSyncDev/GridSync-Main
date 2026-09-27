@@ -49,7 +49,12 @@ CREATE TABLE IF NOT EXISTS sources (
 -- physically close (ST_DWithin on the real geometries, lines included) or scheduled
 -- around the same time. Scoring stays in src/lib/engine/overlap.ts so the what-if
 -- slider can re-score instantly in the browser.
-CREATE OR REPLACE FUNCTION candidate_overlaps(max_miles real DEFAULT 50, max_gap_months int DEFAULT 6, region_miles real DEFAULT 250)
+-- SQL owns no threshold defaults; application callers pass all three from engine/config.ts.
+-- PostgreSQL requires replacement to remove existing parameter defaults.
+-- Replace only this function transactionally; no table data is changed.
+BEGIN;
+DROP FUNCTION IF EXISTS candidate_overlaps(real, integer, real);
+CREATE FUNCTION candidate_overlaps(max_miles real, max_gap_months int, region_miles real)
 RETURNS TABLE (a text, b text, distance_miles real, overlap_days int) LANGUAGE sql STABLE AS $$
   SELECT p.id, q.id,
          (ST_Distance(p.geom, q.geom) / 1609.344)::real,
@@ -60,3 +65,4 @@ RETURNS TABLE (a text, b text, distance_miles real, overlap_days int) LANGUAGE s
      OR (ST_DWithin(p.geom, q.geom, region_miles * 1609.344)
          AND daterange((lower(p.construction) - make_interval(months => max_gap_months))::date, (upper(p.construction) + make_interval(months => max_gap_months))::date) && q.construction)
 $$;
+COMMIT;

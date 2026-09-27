@@ -75,7 +75,7 @@ test("findOverlaps sorts by score", () => {
   const list = findOverlaps([
     base({ id: "a" }),
     base({ id: "b", utility: "u2", geometry: { type: "Point", coordinates: [-80.4, 25.5] } }),
-    base({ id: "c", utility: "u3", geometry: { type: "Point", coordinates: [-80.9, 26.0] }, type: "generation_solar" }),
+    base({ id: "c", utility: "u3", geometry: { type: "Point", coordinates: [-80.6, 25.6] }, type: "generation_solar" }),
   ]);
   assert.ok(list.length >= 2);
   for (let i = 1; i < list.length; i++) assert.ok(list[i - 1].scores.total >= list[i].scores.total);
@@ -92,4 +92,62 @@ test("sister utilities are skipped unless asked", () => {
 test("cross-state pairs are marked", () => {
   const o = compare(base({ id: "a", state: "GA" }), base({ id: "b", utility: "u2", state: "SC", geometry: { type: "Point", coordinates: [-80.4, 25.5] } }));
   assert.equal(o?.crossesStateLine, true);
+});
+
+test("v1 distance boundary includes 25 miles and excludes farther concurrent projects", () => {
+  const a = base({ id: "a", geometry: { type: "Point", coordinates: [0, 0] } });
+  for (const miles of [24.999, 25, 25.001, 60]) {
+    const b = base({
+      id: "b",
+      utility: "u2",
+      geometry: { type: "Point", coordinates: [(miles / 3958.8) * (180 / Math.PI), 0] },
+    });
+    const actualDistance = distanceMiles(a.geometry, b.geometry);
+    assert.ok(Math.abs(actualDistance - miles) < 1e-10);
+    const o = compare(a, b);
+    if (miles <= 25) {
+      assert.ok(o, `expected candidate at ${miles} miles`);
+      assert.deepEqual(o.flags, ["spatial", "temporal"]);
+    } else {
+      assert.equal(o, null, `concurrent schedules must not admit a ${miles}-mile pair`);
+    }
+  }
+});
+
+test("v1 temporal flags include February-to-March adjacency but not a full intervening month", () => {
+  const a = base({ id: "a", construction: { start: "2027-01", end: "2027-02", precision: "published" } });
+  const b = base({ id: "b", utility: "u2", construction: { start: "2027-03", end: "2027-05", precision: "published" } });
+  assert.equal(gapMonths(a.construction, b.construction), 0);
+  assert.equal(overlapMonths(a.construction, b.construction), 0);
+  const adjacent = compare(a, b)!;
+  assert.deepEqual(adjacent.flags, ["spatial", "temporal"]);
+  assert.equal(adjacent.kind, "sharing_opportunity");
+  assert.equal(adjacent.scores.temporal, 50);
+
+  const separated = { ...b, construction: { ...b.construction, start: "2027-04" } };
+  assert.equal(gapMonths(a.construction, separated.construction), 1);
+  assert.deepEqual(compare(a, separated)?.flags, ["spatial"]);
+
+  const distant = { ...b, geometry: { type: "Point" as const, coordinates: [-80.45, 26.47] as [number, number] } };
+  assert.equal(compare(a, distant), null, "adjacent schedules cannot bypass the 25-mile radius");
+});
+
+test("point-to-line candidates use the closest segment interior, not a line center or endpoint", () => {
+  const a = base({ id: "a", geometry: { type: "Point", coordinates: [-80.1, 25.9] } });
+  const b = base({ id: "b", utility: "u2", geometry: { type: "LineString", coordinates: [[-83, 25], [-80, 25], [-80, 27]] } });
+  // Every stored vertex and the vertex-average center are farther than the cutoff.
+  for (const vertex of [[-83, 25], [-80, 25], [-80, 27], [-81, 25.666667]] as [number, number][]) {
+    assert.ok(haversineMiles([-80.1, 25.9], vertex) > 25);
+  }
+  assert.ok(distanceMiles(a.geometry, b.geometry) < 10);
+  assert.equal(distanceMiles(a.geometry, b.geometry), distanceMiles(b.geometry, a.geometry));
+  assert.ok(compare(a, b));
+});
+
+test("line-to-line closest approach admits a pair whose centers are far apart", () => {
+  const a = base({ id: "a", geometry: { type: "LineString", coordinates: [[-82, 25], [-80, 25]] } });
+  const b = base({ id: "b", utility: "u2", geometry: { type: "LineString", coordinates: [[-80, 25.1], [-78, 25.1]] } });
+  assert.ok(haversineMiles([-81, 25], [-79, 25.1]) > 25);
+  assert.ok(distanceMiles(a.geometry, b.geometry) < 10);
+  assert.ok(compare(a, b));
 });

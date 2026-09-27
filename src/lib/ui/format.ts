@@ -35,5 +35,5 @@ export function hexToRgb(hex: string): [number, number, number] {
 
 export const KIND = {
   sharing_opportunity: { label: "Sharing opportunity", color: "#2dd4bf", rgb: [45, 212, 191] as [number, number, number] },
-  collision_risk: { label: "Resource collision risk", color: "#fb923c", rgb: [251, 146, 60] as [number, number, number] },
+  collision_risk: { label: "Potential resource contention", color: "#fb923c", rgb: [251, 146, 60] as [number, number, number] },
 };
