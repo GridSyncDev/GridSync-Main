@@ -7,6 +7,7 @@ import { coordinationThresholdsKm, coordinationThresholdsMiles } from "@/lib/eng
 import { compare, findOverlaps, windowOf, type Overlap, type OverlapParams } from "@/lib/engine/overlap";
 import { addMonths, toIndex } from "@/lib/engine/time";
 import { KIND } from "@/lib/ui/format";
+import { impactScenarioForPair } from "@/lib/impact";
 import { DATA_URL, INGEST_URL } from "@/lib/ui/repo";
 import { PRESETS, type PresetKey } from "@/lib/ui/presets";
 import type { FlyTarget } from "./MapView";
@@ -358,6 +359,7 @@ function Toggle({ on, onClick, children }: { on: boolean; onClick: () => void; c
 
 function OverlapCard({ o, a, b, colors, selected, onClick }: { o: Overlap; a: Project; b: Project; colors: Record<string, { color: string; name: string }>; selected: boolean; onClick: () => void }) {
   const k = KIND[o.kind];
+  const hasImpactScenario = Boolean(impactScenarioForPair(a, b));
   return (
     <button
       onClick={onClick}
@@ -381,6 +383,11 @@ function OverlapCard({ o, a, b, colors, selected, onClick }: { o: Overlap; a: Pr
         <span>{o.actualTimelineOverlap ? `${o.overlapMonths} mo overlap` : o.immediatelySequential ? "immediately sequential" : `${o.gapMonths} mo apart`}</span>
         {o.crossesStateLine && <span className="text-interstate">{a.state}⇄{b.state}</span>}
       </div>
+      {hasImpactScenario && (
+        <div className="mt-1.5 pl-10">
+          <span className="rounded-full border border-share/40 bg-share/10 px-2 py-0.5 text-[10px] font-medium text-share">Impact estimate available</span>
+        </div>
+      )}
     </button>
   );
 }
@@ -434,3 +441,4 @@ function Logo() {
     </svg>
   );
 }
+

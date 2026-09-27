@@ -6,6 +6,7 @@ import { windowOf, type CoordinationPointKey, type Overlap } from "@/lib/engine/
 import { KIND, fmtMonth, statusLabel, typeLabel } from "@/lib/ui/format";
 import { repoSourceFor } from "@/lib/ui/repo";
 import Brief from "./Brief";
+import ImpactScenario from "./ImpactScenario";
 
 interface Props {
   overlap: Overlap | null;
@@ -104,6 +105,8 @@ export default function OverlapDetail({ overlap, baseline, a, b, utilities, shif
           <p className="mt-2 font-mono text-[11px] text-muted">{o.distanceMiles.toFixed(3)} mi / {o.distanceKm.toFixed(3)} km closest-point distance · raw {o.scores.points}/4 · normalized {o.scores.normalized}/100</p>
         </section>
 
+        <ImpactScenario overlap={o} a={a} b={b} />
+
         <section>
           <h3 className="mb-2 text-[11px] font-semibold uppercase tracking-wider text-muted">Shared resource tags — descriptive, not scored ({o.sharedResources.length})</h3>
           <div className="flex flex-wrap gap-1.5">
@@ -168,3 +171,4 @@ function RepoLinks({ projectId }: { projectId: string }) {
     </div>
   );
 }
+
